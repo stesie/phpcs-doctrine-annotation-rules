@@ -3,11 +3,11 @@
 namespace DoctrineAnnotations\Sniffs\Commenting;
 
 use DoctrineAnnotations\Helper\DocBlockHelper;
+use DoctrineAnnotations\Helper\DoctrineMappingHelper;
 use PHP_CodeSniffer\Files\File;
 
 class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
 {
-
     /**
      * @param File $phpcsFile
      * @param int $stackPtr
@@ -15,7 +15,7 @@ class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
      */
     protected function sniffDocblock(File $phpcsFile, $stackPtr, $annotations)
     {
-        if (!$this->isDoctrineMappedProperty($annotations)) {
+        if (!DoctrineMappingHelper::isDoctrineMappedProperty($annotations)) {
             return;
         }
 

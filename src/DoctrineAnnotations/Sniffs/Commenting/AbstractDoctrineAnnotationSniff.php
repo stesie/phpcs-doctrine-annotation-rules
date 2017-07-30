@@ -4,12 +4,6 @@ namespace DoctrineAnnotations\Sniffs\Commenting;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Embedded;
-use Doctrine\ORM\Mapping\ManyToMany;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\OneToOne;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
@@ -189,27 +183,6 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         $parser->setImports($this->imports);
 
         return $parser->parse($content);
-    }
-
-    /**
-     * @param array $annotations
-     * @return bool
-     */
-    protected function isDoctrineMappedProperty($annotations)
-    {
-        foreach ($annotations as $doctrineTag) {
-            switch (get_class($doctrineTag)) {
-                case Column::class:
-                case Embedded::class:
-                case OneToOne::class:
-                case OneToMany::class:
-                case ManyToOne::class:
-                case ManyToMany::class:
-                    return true;
-            }
-        }
-
-        return false;
     }
 
     /**
