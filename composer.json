@@ -1,0 +1,22 @@
+{
+    "name": "stesie/phpcs-doctrine-annotation-rules",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stefan Siegl",
+            "email": "stesie@brokenpipe.de"
+        }
+    ],
+    "require": {
+        "squizlabs/php_codesniffer": "^3.0",
+        "symplify/easy-coding-standard": "^2.2",
+        "doctrine/annotations": "^1.5",
+        "doctrine/orm": "^2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "DoctrineAnnotations\\": "src/DoctrineAnnotations"
+        }
+    }
+}
