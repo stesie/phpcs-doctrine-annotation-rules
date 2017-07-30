@@ -30,7 +30,6 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      */
     abstract protected function sniffDocblock(File $phpcsFile, $stackPtr, $annotations);
 
-
     /**
      * @return int[]
      */
@@ -192,7 +191,6 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     private function processDocblock(File $phpcsFile, $stackPtr)
     {
         $annotations = $this->parseDocblockWithDoctrine($phpcsFile, $stackPtr);
-
         $this->sniffDocblock($phpcsFile, $stackPtr, $annotations);
     }
 }
