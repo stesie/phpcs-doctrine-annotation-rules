@@ -20,7 +20,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
             return;
         }
 
-        /** @var JoinColumn $joinColumn */
+        /** @var JoinColumn|null $joinColumn */
         $joinColumn = DoctrineMappingHelper::findAnnotationByClass(JoinColumn::class, $annotations);
 
         if (null === $joinColumn) {

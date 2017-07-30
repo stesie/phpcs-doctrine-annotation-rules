@@ -1,0 +1,4 @@
+parameters:
+    autoload_files:
+        - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
+        - %currentWorkingDirectory%/vendor/autoload.php

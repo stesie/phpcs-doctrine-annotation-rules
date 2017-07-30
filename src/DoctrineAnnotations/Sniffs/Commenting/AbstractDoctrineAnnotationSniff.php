@@ -7,6 +7,9 @@ use Doctrine\Common\Annotations\DocParser;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
+// make define() statements for PHPStan
+require_once __DIR__.'/../../../../vendor/squizlabs/php_codesniffer/src/Util/Tokens.php';
+
 abstract class AbstractDoctrineAnnotationSniff implements Sniff
 {
     /**
@@ -31,7 +34,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     abstract protected function sniffDocblock(File $phpcsFile, $stackPtr, $annotations);
 
     /**
-     * @return int[]
+     * @return array
      */
     public function register()
     {
