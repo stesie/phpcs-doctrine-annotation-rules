@@ -1,6 +1,6 @@
 <?php
 
-namespace DoctrineAnnotations\Helper;
+namespace DoctrineAnnotationCodingStandard\Helper;
 
 use Doctrine\ORM\Mapping;
 

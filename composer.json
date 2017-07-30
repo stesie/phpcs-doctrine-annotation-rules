@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DoctrineAnnotations\\": "src/DoctrineAnnotations"
+            "DoctrineAnnotationCodingStandard\\": "src/DoctrineAnnotationCodingStandard"
         }
     },
     "require-dev": {

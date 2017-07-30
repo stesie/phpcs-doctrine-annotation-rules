@@ -1,6 +1,6 @@
 <?php
 
-namespace DoctrineAnnotations\Sniffs\Commenting;
+namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;

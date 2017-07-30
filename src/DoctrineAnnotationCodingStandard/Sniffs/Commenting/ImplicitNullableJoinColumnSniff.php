@@ -1,10 +1,10 @@
 <?php
 
-namespace DoctrineAnnotations\Sniffs\Commenting;
+namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 
 use Doctrine\ORM\Mapping\JoinColumn;
-use DoctrineAnnotations\Helper\DocBlockHelper;
-use DoctrineAnnotations\Helper\DoctrineMappingHelper;
+use DoctrineAnnotationCodingStandard\Helper\DocBlockHelper;
+use DoctrineAnnotationCodingStandard\Helper\DoctrineMappingHelper;
 use PHP_CodeSniffer\Files\File;
 
 class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
