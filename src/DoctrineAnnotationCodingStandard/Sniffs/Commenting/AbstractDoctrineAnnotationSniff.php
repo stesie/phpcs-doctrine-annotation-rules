@@ -7,9 +7,6 @@ use Doctrine\Common\Annotations\DocParser;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
-// make define() statements for PHPStan
-require_once __DIR__.'/../../../../vendor/squizlabs/php_codesniffer/src/Util/Tokens.php';
-
 abstract class AbstractDoctrineAnnotationSniff implements Sniff
 {
     /**

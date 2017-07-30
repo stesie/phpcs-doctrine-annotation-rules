@@ -2,3 +2,7 @@ parameters:
     autoload_files:
         - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
         - %currentWorkingDirectory%/vendor/autoload.php
+
+        # not really an autoloader, but has some define() statements that
+        # are otherwise not correctly loaded by PHPStan
+        - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
