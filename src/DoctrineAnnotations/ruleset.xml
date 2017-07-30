@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
 <ruleset name="DoctrineAnnotations">
+    <rule ref="DoctrineAnnotations.Commenting.ImplicitNullableJoinColumn" />
     <rule ref="DoctrineAnnotations.Commenting.VarTagMissing" />
 </ruleset>

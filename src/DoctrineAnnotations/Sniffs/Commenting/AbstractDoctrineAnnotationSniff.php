@@ -73,6 +73,22 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     }
 
     /**
+     * @return string[]
+     */
+    public function getImports()
+    {
+        return $this->imports;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
      * @param File $phpcsFile
      * @param int $stackPtr
      * @return string
