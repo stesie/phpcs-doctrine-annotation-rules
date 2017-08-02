@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace DoctrineAnnotationCodingStandard\Helper;
 
@@ -11,7 +11,7 @@ class DocBlockHelper
      * @param int $stackPtr
      * @return string|null
      */
-    public static function getVarTagContent(File $phpcsFile, $stackPtr)
+    public static function getVarTagContent(File $phpcsFile, int $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -33,7 +33,7 @@ class DocBlockHelper
      * @param string $class
      * @return string|null
      */
-    public static function findTagByClass(File $phpcsFile, $stackPtr, $imports, $class)
+    public static function findTagByClass(File $phpcsFile, int $stackPtr, array $imports, string $class)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -58,7 +58,7 @@ class DocBlockHelper
      * @param int $tagPos
      * @return string
      */
-    private static function fetchTagContent($tokens, $tagPos)
+    private static function fetchTagContent(array $tokens, int $tagPos): string
     {
         $tagName = substr($tokens[$tagPos]['content'], 1);
 
@@ -79,11 +79,11 @@ class DocBlockHelper
     }
 
     /**
-     * @param $imports
-     * @param $tagName
+     * @param string[] $imports
+     * @param string $tagName
      * @return string
      */
-    private static function expandClassName($imports, $tagName)
+    private static function expandClassName(array $imports, string $tagName): string
     {
         $nsSeparator = strpos($tagName, '\\');
         if (false !== $nsSeparator) {

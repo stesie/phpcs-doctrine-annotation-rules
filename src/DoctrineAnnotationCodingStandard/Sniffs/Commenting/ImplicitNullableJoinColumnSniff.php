@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 
@@ -14,7 +14,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
      * @param int $stackPtr
      * @param array $annotations
      */
-    protected function sniffDocblock(File $phpcsFile, $stackPtr, $annotations)
+    protected function sniffDocblock(File $phpcsFile, int $stackPtr, array $annotations)
     {
         if (!DoctrineMappingHelper::isDoctrineJoin($annotations)) {
             return;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace DoctrineAnnotationCodingStandard\Helper;
 
@@ -10,7 +10,7 @@ class DoctrineMappingHelper
      * @param array $annotations
      * @return bool
      */
-    public static function isDoctrineMappedProperty($annotations)
+    public static function isDoctrineMappedProperty(array $annotations): bool
     {
         foreach ($annotations as $doctrineTag) {
             switch (get_class($doctrineTag)) {
@@ -31,7 +31,7 @@ class DoctrineMappingHelper
      * @param array $annotations
      * @return bool
      */
-    public static function isDoctrineJoin($annotations)
+    public static function isDoctrineJoin(array $annotations): bool
     {
         foreach ($annotations as $doctrineTag) {
             switch (get_class($doctrineTag)) {
@@ -51,7 +51,7 @@ class DoctrineMappingHelper
      * @param array $annotations
      * @return object|null
      */
-    public static function findAnnotationByClass($className, $annotations)
+    public static function findAnnotationByClass(string $className, array $annotations)
     {
         foreach ($annotations as $doctrineTag) {
             if ($className === get_class($doctrineTag)) {

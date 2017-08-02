@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 
@@ -28,12 +28,12 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param int $stackPtr
      * @param array $annotations
      */
-    abstract protected function sniffDocblock(File $phpcsFile, $stackPtr, $annotations);
+    abstract protected function sniffDocblock(File $phpcsFile, int $stackPtr, array $annotations);
 
     /**
      * @return array
      */
-    public function register()
+    public function register(): array
     {
         /** @noinspection PhpDeprecationInspection */
         AnnotationRegistry::registerLoader('class_exists');
@@ -49,7 +49,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param File $phpcsFile
      * @param int $stackPtr
      * @return int|void
-     */
+     */ // @codingStandardsIgnoreLine
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
@@ -75,7 +75,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     /**
      * @return string[]
      */
-    public function getImports()
+    public function getImports(): array
     {
         return $this->imports;
     }
@@ -93,7 +93,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param int $stackPtr
      * @return string
      */
-    private function getDocblockContent(File $phpcsFile, $stackPtr)
+    private function getDocblockContent(File $phpcsFile, int $stackPtr): string
     {
         $tokens = $phpcsFile->getTokens();
         $content = '';
@@ -109,7 +109,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param File $phpcsFile
      * @param int $stackPtr
      */
-    private function processNamespace(File $phpcsFile, $stackPtr)
+    private function processNamespace(File $phpcsFile, int $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -132,7 +132,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param File $phpcsFile
      * @param int $stackPtr
      */
-    private function processUse(File $phpcsFile, $stackPtr)
+    private function processUse(File $phpcsFile, int $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -186,10 +186,10 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
 
     /**
      * @param File $phpcsFile
-     * @param $stackPtr
+     * @param int $stackPtr
      * @return array
      */
-    private function parseDocblockWithDoctrine(File $phpcsFile, $stackPtr)
+    private function parseDocblockWithDoctrine(File $phpcsFile, int $stackPtr): array
     {
         $content = $this->getDocblockContent($phpcsFile, $stackPtr);
 
@@ -204,7 +204,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param File $phpcsFile
      * @param int $stackPtr
      */
-    private function processDocblock(File $phpcsFile, $stackPtr)
+    private function processDocblock(File $phpcsFile, int $stackPtr)
     {
         $annotations = $this->parseDocblockWithDoctrine($phpcsFile, $stackPtr);
         $this->sniffDocblock($phpcsFile, $stackPtr, $annotations);
