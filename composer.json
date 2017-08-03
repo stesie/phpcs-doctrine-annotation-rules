@@ -24,5 +24,16 @@
         "jakub-onderka/php-console-highlighter": "^0.3.2",
         "slevomat/coding-standard": "^3.0",
         "consistence/coding-standard": "^2.0"
+    },
+    "scripts": {
+        "lint": "vendor/bin/parallel-lint src",
+        "phpcbf": "vendor/bin/phpcs --standard=ruleset.xml -sp src",
+        "phpcs": "vendor/bin/phpcs --standard=ruleset.xml -sp src",
+        "phpstan": "vendor/bin/phpstan analyse run -c phpstan.neon --level 7 src",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpstan"
+        ]
     }
 }
