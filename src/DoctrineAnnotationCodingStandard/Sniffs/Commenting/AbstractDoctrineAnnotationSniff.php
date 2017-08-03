@@ -46,10 +46,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     }
 
     /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      * @param File $phpcsFile
      * @param int $stackPtr
      * @return int|void
-     */ // @codingStandardsIgnoreLine
+     */
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
