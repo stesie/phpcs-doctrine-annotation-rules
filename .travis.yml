@@ -24,4 +24,4 @@ script:
   - composer run-script test
 
 after_script:
-  - vendor/bin/coveralls --coverage_clover=tests/clover.xml
+  - vendor/bin/coveralls
