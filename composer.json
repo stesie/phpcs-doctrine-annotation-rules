@@ -18,22 +18,30 @@
             "DoctrineAnnotationCodingStandard\\": "src/DoctrineAnnotationCodingStandard"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "DoctrineAnnotationCodingStandardTests\\": "tests/DoctrineAnnotationCodingStandard"
+        }
+    },
     "require-dev": {
         "phpstan/phpstan": "^0.8.0",
         "jakub-onderka/php-parallel-lint": "^0.9.2",
         "jakub-onderka/php-console-highlighter": "^0.3.2",
         "slevomat/coding-standard": "^3.0",
-        "consistence/coding-standard": "^2.0"
+        "consistence/coding-standard": "^2.0",
+        "phpunit/phpunit": "^6.3"
     },
     "scripts": {
         "lint": "vendor/bin/parallel-lint src",
-        "phpcbf": "vendor/bin/phpcbf --standard=ruleset.xml -sp src",
-        "phpcs": "vendor/bin/phpcs --standard=ruleset.xml -sp src",
-        "phpstan": "vendor/bin/phpstan analyse run -c phpstan.neon --level 7 src",
+        "phpcbf": "vendor/bin/phpcbf --standard=ruleset.xml --extensions=php -sp src tests",
+        "phpcs": "vendor/bin/phpcs --standard=ruleset.xml --extensions=php -sp src tests",
+        "phpstan": "vendor/bin/phpstan analyse run -c phpstan.neon --level 7 src tests",
+        "phpunit": "vendor/bin/phpunit --config=tests/phpunit.xml  tests",
         "test": [
             "@lint",
             "@phpcs",
-            "@phpstan"
+            "@phpstan",
+            "@phpunit"
         ]
     }
 }
