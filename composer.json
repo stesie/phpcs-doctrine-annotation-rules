@@ -11,7 +11,7 @@
     "require": {
         "squizlabs/php_codesniffer": "^3.0",
         "doctrine/annotations": "^1.4",
-        "doctrine/orm": "^2.4"
+        "doctrine/orm": "^2.5"
     },
     "autoload": {
         "psr-4": {
