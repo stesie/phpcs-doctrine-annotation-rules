@@ -1,6 +1,6 @@
 # Doctrine Annotation Coding Standard
 
-![PHPStan](https://img.shields.io/badge/style-level%206-brightgreen.svg?style=flat-square&label=phpstan)
+![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?style=flat-square&label=phpstan)
 
 Doctrine Annotation Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) provides
 some additional sniffs centered on DocBlock annotations for [Doctrine ORM](github.com/doctrine/doctrine2/).
