@@ -29,7 +29,8 @@
         "jakub-onderka/php-console-highlighter": "^0.3.2",
         "slevomat/coding-standard": "^3.0",
         "consistence/coding-standard": "^2.0",
-        "phpunit/phpunit": "^6.0"
+        "phpunit/phpunit": "^6.0",
+        "satooshi/php-coveralls": "^1.0"
     },
     "scripts": {
         "lint": "vendor/bin/parallel-lint src",

@@ -22,3 +22,6 @@ before_script:
 script:
   - mkdir -p run
   - composer run-script test
+
+after_script:
+  - vendor/bin/coveralls --coverage_clover=tests/clover.xml

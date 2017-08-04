@@ -9,6 +9,16 @@
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutTodoAnnotatedTests="true"
 >
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+        <log
+                type="coverage-text"
+                target="php://stdout"
+                showUncoveredFiles="true"
+                showOnlySummary="true"
+        />
+    </logging>
+
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src</directory>
