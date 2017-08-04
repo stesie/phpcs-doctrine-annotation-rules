@@ -9,6 +9,9 @@ use PHP_CodeSniffer\Files\File;
 
 class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
 {
+    const CODE_NO_JOIN_COLUMN = 'NoJoinColumn';
+    const CODE_NO_NULLABLE_PROPERTY = 'NoNullableProperty';
+
     /**
      * @param File $phpcsFile
      * @param int $stackPtr
@@ -25,7 +28,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
 
         if ($joinColumn === null) {
             $error = 'There must be a @JoinColumn tag on Doctrine mapped relations';
-            $phpcsFile->addError($error, $stackPtr, 'NoJoinColumn');
+            $phpcsFile->addError($error, $stackPtr, self::CODE_NO_JOIN_COLUMN);
             return;
         }
 
@@ -38,7 +41,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
 
         if (!preg_match('/nullable=true/', $content)) {
             $error = 'There must be an explicit nullable property on @JoinColumn tag';
-            $phpcsFile->addError($error, $stackPtr, 'NoNullableProperty');
+            $phpcsFile->addError($error, $stackPtr, self::CODE_NO_NULLABLE_PROPERTY);
             return;
         }
     }

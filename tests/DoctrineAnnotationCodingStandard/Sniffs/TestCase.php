@@ -73,7 +73,13 @@ abstract class TestCase extends BaseTestCase
         );
     }
 
-    protected function assertNoSniffError(File $codeSnifferFile, int $line)
+    protected function assertNoSniffErrors(File $codeSnifferFile)
+    {
+        $errors = $codeSnifferFile->getErrors();
+        $this->assertEmpty($errors, 'Expected no errors');
+    }
+
+    protected function assertNoSniffErrorOnLine(File $codeSnifferFile, int $line)
     {
         $errors = $codeSnifferFile->getErrors();
         $this->assertFalse(
