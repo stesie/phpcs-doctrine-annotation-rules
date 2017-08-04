@@ -1,5 +1,7 @@
 # Doctrine Annotation Coding Standard
 
+[![Build Status](https://travis-ci.org/stesie/phpcs-doctrine-annotation-rules.svg?branch=master)](https://travis-ci.org/stesie/phpcs-doctrine-annotation-rules)
+[![Coverage Status](https://coveralls.io/repos/github/stesie/phpcs-doctrine-annotation-rules/badge.svg?branch=master)](https://coveralls.io/github/stesie/phpcs-doctrine-annotation-rules?branch=master)
 ![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?style=flat-square&label=phpstan)
 
 Doctrine Annotation Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) provides
