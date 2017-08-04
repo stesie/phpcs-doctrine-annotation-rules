@@ -114,14 +114,14 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        if ('T_WHITESPACE' !== $tokens[$stackPtr + 1]['type']) {
+        if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
             throw new \LogicException('Token after T_NAMESPACE not T_WHITESPACE');
         }
 
         $namespace = '';
         $stackPtr += 2;
 
-        while ('T_SEMICOLON' !== $tokens[$stackPtr]['type']) {
+        while ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
             $namespace .= $tokens[$stackPtr]['content'];
             $stackPtr++;
         }
@@ -137,7 +137,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        if ('T_WHITESPACE' !== $tokens[$stackPtr + 1]['type']) {
+        if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
             throw new \LogicException('Token after T_USE not T_WHITESPACE');
         }
 
@@ -149,16 +149,16 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
             $stackPtr++;
         }
 
-        if ('T_WHITESPACE' === $tokens[$stackPtr]['type']) {
+        if ($tokens[$stackPtr]['type'] === 'T_WHITESPACE') {
             $stackPtr++;
         }
 
-        if ('T_AS' === $tokens[$stackPtr]['type']) {
-            if ('T_WHITESPACE' !== $tokens[$stackPtr + 1]['type']) {
+        if ($tokens[$stackPtr]['type'] === 'T_AS') {
+            if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
                 throw new \LogicException('Token after T_AS not T_WHITESPACE');
             }
 
-            if ('T_STRING' !== $tokens[$stackPtr + 2]['type']) {
+            if ($tokens[$stackPtr + 2]['type'] !== 'T_STRING') {
                 throw new \LogicException('T_STRING expected after [T_AS][T_WHITESPACE]');
             }
 
@@ -167,18 +167,18 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         } else {
             $ptr = strrpos($use, '\\');
 
-            if (false === $ptr) {
+            if ($ptr === false) {
                 $alias = $use;
             } else {
                 $alias = substr($use, $ptr + 1);
             }
         }
 
-        if ('T_WHITESPACE' === $tokens[$stackPtr]['type']) {
+        if ($tokens[$stackPtr]['type'] === 'T_WHITESPACE') {
             $stackPtr++;
         }
 
-        if ('T_SEMICOLON' !== $tokens[$stackPtr]['type']) {
+        if ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
             throw new \LogicException('Parse error after T_USE, T_SEMICOLON expected');
         }
 

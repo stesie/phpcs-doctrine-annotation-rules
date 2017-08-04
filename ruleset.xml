@@ -8,7 +8,6 @@
 
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
         <exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility.MissingConstantVisibility"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.YodaComparison" />
         <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName" />
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName" />

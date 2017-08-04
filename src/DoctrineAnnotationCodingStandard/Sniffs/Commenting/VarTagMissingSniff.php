@@ -19,7 +19,7 @@ class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
             return;
         }
 
-        if (null === DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr)) {
+        if (DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr) === null) {
             $error = 'There must be a @var tag on Doctrine mapped properties';
             $phpcsFile->addError($error, $stackPtr, 'NoVarTag');
         }

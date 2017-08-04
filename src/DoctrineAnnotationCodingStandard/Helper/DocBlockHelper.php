@@ -16,7 +16,7 @@ class DocBlockHelper
         $tokens = $phpcsFile->getTokens();
 
         foreach ($tokens[$stackPtr]['comment_tags'] as $tagPos) {
-            if ('@var' !== $tokens[$tagPos]['content']) {
+            if ($tokens[$tagPos]['content'] !== '@var') {
                 continue;
             }
 
@@ -41,7 +41,7 @@ class DocBlockHelper
             $tagName = substr($tokens[$tagPos]['content'], 1);
 
             $parenPos = strpos($tagName, '(');
-            if (false !== $parenPos) {
+            if ($parenPos !== false) {
                 $tagName = substr($tagName, 0, $parenPos);
             }
 
@@ -63,15 +63,15 @@ class DocBlockHelper
         $tagName = substr($tokens[$tagPos]['content'], 1);
 
         $parenPos = strpos($tagName, '(');
-        if (false !== $parenPos) {
+        if ($parenPos !== false) {
             return substr($tagName, $parenPos);
         }
 
-        if ('T_DOC_COMMENT_WHITESPACE' !== $tokens[$tagPos + 1]['type']) {
+        if ($tokens[$tagPos + 1]['type'] !== 'T_DOC_COMMENT_WHITESPACE') {
             throw new \LogicException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
         }
 
-        if ('T_DOC_COMMENT_STRING' !== $tokens[$tagPos + 2]['type']) {
+        if ($tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
             throw new \LogicException('T_DOC_COMMENT_STRING expected after @tag');
         }
 
@@ -86,7 +86,7 @@ class DocBlockHelper
     private static function expandClassName(array $imports, string $tagName): string
     {
         $nsSeparator = strpos($tagName, '\\');
-        if (false !== $nsSeparator) {
+        if ($nsSeparator !== false) {
             $alias = strtolower(substr($tagName, 0, $nsSeparator));
 
             if (isset($imports[$alias])) {
