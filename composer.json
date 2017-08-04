@@ -27,7 +27,7 @@
     },
     "scripts": {
         "lint": "vendor/bin/parallel-lint src",
-        "phpcbf": "vendor/bin/phpcs --standard=ruleset.xml -sp src",
+        "phpcbf": "vendor/bin/phpcbf --standard=ruleset.xml -sp src",
         "phpcs": "vendor/bin/phpcs --standard=ruleset.xml -sp src",
         "phpstan": "vendor/bin/phpstan analyse run -c phpstan.neon --level 7 src",
         "test": [
