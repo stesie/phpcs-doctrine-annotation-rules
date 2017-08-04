@@ -8,6 +8,8 @@ use PHP_CodeSniffer\Files\File;
 
 class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
 {
+    const CODE_NO_VAR_TAG = 'NoVarTag';
+
     /**
      * @param File $phpcsFile
      * @param int $stackPtr
@@ -21,7 +23,7 @@ class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
 
         if (DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr) === null) {
             $error = 'There must be a @var tag on Doctrine mapped properties';
-            $phpcsFile->addError($error, $stackPtr, 'NoVarTag');
+            $phpcsFile->addError($error, $stackPtr, self::CODE_NO_VAR_TAG);
         }
     }
 }
