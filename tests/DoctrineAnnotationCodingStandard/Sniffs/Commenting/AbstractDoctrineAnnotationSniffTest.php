@@ -2,19 +2,10 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Sniffs\Commenting;
 
-use PHPUnit\Framework\TestCase;
-use PHP_CodeSniffer\Config;
-use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Files\LocalFile;
-use PHP_CodeSniffer\Runner;
+use DoctrineAnnotationCodingStandardTests\Sniffs\TestCase;
 
 class AbstractDoctrineAnnotationSniffTest extends TestCase
 {
-    /**
-     * @var Runner
-     */
-    private $codeSniffer;
-
     public function testNamespaceDetectionWithoutNamespace()
     {
         $this->checkFile(__DIR__ . '/data/FileNoNamespace.inc', DummySniff::class);
@@ -39,7 +30,6 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertEquals(['testling' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
     }
 
-
     private function getSniff(): DummySniff
     {
         $sniff = reset($this->codeSniffer->ruleset->sniffs);
@@ -49,28 +39,5 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         }
 
         return $sniff;
-    }
-
-    protected function setUp()
-    {
-        $this->codeSniffer = new Runner();
-        $this->codeSniffer->config = new Config(['-s']);
-        $this->codeSniffer->init();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $sniff
-     * @return File
-     */
-    private function checkFile(string $filePath, string $sniff): File
-    {
-        $this->codeSniffer->ruleset->sniffs = [$sniff => $sniff];
-        $this->codeSniffer->ruleset->populateTokenListeners();
-
-        $file = new LocalFile($filePath, $this->codeSniffer->ruleset, $this->codeSniffer->config);
-        $file->process();
-
-        return $file;
     }
 }
