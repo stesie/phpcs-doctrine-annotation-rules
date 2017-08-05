@@ -31,11 +31,35 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
     }
 
     /**
+     * @dataProvider invalidNamespaceStatementProvider
+     * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
+     * @param string $content
+     */
+    public function testParseErrorsNamespace(string $content)
+    {
+        $this->checkString($content, DummySniff::class);
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function invalidNamespaceStatementProvider(): array
+    {
+        return [
+            ['namespace;'],
+            ['namespace();'],
+            ['namespace <=>;'],
+            ['namespace Foo<=>Bar;'],
+            ['namespace ;'],
+        ];
+    }
+
+    /**
      * @dataProvider invalidUseStatementProvider
      * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
      * @param string $content
      */
-    public function testParseErrorAfterUse(string $content)
+    public function testParseErrorsUse(string $content)
     {
         $this->checkString($content, DummySniff::class);
     }

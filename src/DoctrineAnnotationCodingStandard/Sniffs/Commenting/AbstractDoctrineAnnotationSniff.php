@@ -116,15 +116,27 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
-            throw new \LogicException('Token after T_NAMESPACE not T_WHITESPACE');
+            throw new ParseErrorException('Token after T_NAMESPACE not T_WHITESPACE');
         }
 
         $namespace = '';
         $stackPtr += 2;
 
-        while ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
+        while (in_array($tokens[$stackPtr]['type'], ['T_STRING', 'T_NS_SEPARATOR'])) {
             $namespace .= $tokens[$stackPtr]['content'];
             $stackPtr++;
+        }
+
+        if ($tokens[$stackPtr]['type'] === 'T_WHITESPACE') {
+            $stackPtr++;
+        }
+
+        if ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
+            throw new ParseErrorException('Parse error after T_USE, T_SEMICOLON expected');
+        }
+
+        if (empty($namespace)) {
+            throw new ParseErrorException('Empty namespace not valid');
         }
 
         $this->namespace = $namespace;
