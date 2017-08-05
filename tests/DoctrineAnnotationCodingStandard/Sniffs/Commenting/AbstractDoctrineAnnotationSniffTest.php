@@ -21,13 +21,13 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
     public function testSimpleUse()
     {
         $this->checkFile(__DIR__ . '/data/SimpleUse.inc', DummySniff::class);
-        $this->assertEquals(['baz' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
+        $this->assertSame(['baz' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
     }
 
     public function testUseWithRename()
     {
         $this->checkFile(__DIR__ . '/data/UseWithRename.inc', DummySniff::class);
-        $this->assertEquals(['testling' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
+        $this->assertSame(['testling' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
     }
 
     /**
