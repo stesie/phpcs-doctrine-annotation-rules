@@ -54,6 +54,12 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         ];
     }
 
+    public function testNamespaceExtraction()
+    {
+        $this->checkString('namespace     Foo\\Bar     ;;', DummySniff::class);
+        $this->assertSame('Foo\\Bar', $this->getSniff()->getNamespace());
+    }
+
     /**
      * @dataProvider invalidUseStatementProvider
      * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
