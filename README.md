@@ -22,7 +22,7 @@ The recommended way to install Doctrine Annotation Coding Standard is [through C
 ```JSON
 {
 	"require-dev": {
-		"stesie/phpcs-doctrine-annotation-rules": "^0.0"
+		"stesie/phpcs-doctrine-annotation-rules": "dev-master"
 	}
 }
 ```
