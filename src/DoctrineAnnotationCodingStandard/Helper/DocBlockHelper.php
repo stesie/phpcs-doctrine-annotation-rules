@@ -2,6 +2,7 @@
 
 namespace DoctrineAnnotationCodingStandard\Helper;
 
+use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
 use PHP_CodeSniffer\Files\File;
 
 class DocBlockHelper
@@ -14,6 +15,14 @@ class DocBlockHelper
     public static function getVarTagContent(File $phpcsFile, int $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
+
+        if (!isset($tokens[$stackPtr])) {
+            throw new \OutOfRangeException();
+        }
+
+        if ($tokens[$stackPtr]['type'] !== 'T_DOC_COMMENT_OPEN_TAG') {
+            throw new \InvalidArgumentException();
+        }
 
         foreach ($tokens[$stackPtr]['comment_tags'] as $tagPos) {
             if ($tokens[$tagPos]['content'] !== '@var') {
@@ -36,6 +45,14 @@ class DocBlockHelper
     public static function findTagByClass(File $phpcsFile, int $stackPtr, array $imports, string $class)
     {
         $tokens = $phpcsFile->getTokens();
+
+        if (!isset($tokens[$stackPtr])) {
+            throw new \OutOfRangeException();
+        }
+
+        if ($tokens[$stackPtr]['type'] !== 'T_DOC_COMMENT_OPEN_TAG') {
+            throw new \InvalidArgumentException();
+        }
 
         foreach ($tokens[$stackPtr]['comment_tags'] as $tagPos) {
             $tagName = substr($tokens[$tagPos]['content'], 1);
@@ -68,14 +85,14 @@ class DocBlockHelper
         }
 
         if ($tokens[$tagPos + 1]['type'] !== 'T_DOC_COMMENT_WHITESPACE') {
-            throw new \LogicException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
+            throw new ParseErrorException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
         }
 
         if ($tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
-            throw new \LogicException('T_DOC_COMMENT_STRING expected after @tag');
+            throw new ParseErrorException('T_DOC_COMMENT_STRING expected after @tag');
         }
 
-        return $tokens[$tagPos + 2]['content'];
+        return trim($tokens[$tagPos + 2]['content']);
     }
 
     /**
