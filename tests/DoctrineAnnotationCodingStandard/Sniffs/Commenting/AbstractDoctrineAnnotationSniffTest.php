@@ -30,6 +30,32 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertEquals(['testling' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports());
     }
 
+    /**
+     * @dataProvider invalidUseStatementProvider
+     * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
+     * @param string $content
+     */
+    public function testParseErrorAfterUse(string $content)
+    {
+        $this->checkString($content, DummySniff::class);
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function invalidUseStatementProvider(): array
+    {
+        return [
+            ['use <=>;'],
+            ['use()Foo;'],
+            ['use Foo()Bar() As Bar;'],
+            ['use Foo()As Bar;'],
+            ['use Foo\Bar As()Bar;'],
+            ['use Foo\Bar As <=>;'],
+            ['use Foo\Bar As Bar <=>;'],
+        ];
+    }
+
     private function getSniff(): DummySniff
     {
         $sniff = reset($this->codeSniffer->ruleset->sniffs);

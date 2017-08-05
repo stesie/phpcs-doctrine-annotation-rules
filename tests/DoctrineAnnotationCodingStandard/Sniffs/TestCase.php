@@ -10,6 +10,7 @@ namespace DoctrineAnnotationCodingStandardTests\Sniffs;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Files\DummyFile;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
@@ -39,6 +40,22 @@ abstract class TestCase extends BaseTestCase
         $this->codeSniffer->ruleset->populateTokenListeners();
 
         $file = new LocalFile($filePath, $this->codeSniffer->ruleset, $this->codeSniffer->config);
+        $file->process();
+
+        return $file;
+    }
+
+    /**
+     * @param string $content
+     * @param string $sniff
+     * @return File
+     */
+    protected function checkString(string $content, string $sniff): File
+    {
+        $this->codeSniffer->ruleset->sniffs = [$sniff => $sniff];
+        $this->codeSniffer->ruleset->populateTokenListeners();
+
+        $file = new DummyFile('<?php ' . $content, $this->codeSniffer->ruleset, $this->codeSniffer->config);
         $file->process();
 
         return $file;

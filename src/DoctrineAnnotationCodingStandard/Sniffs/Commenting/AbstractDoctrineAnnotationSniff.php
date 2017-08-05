@@ -4,6 +4,7 @@ namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
+use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
@@ -138,7 +139,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
-            throw new \LogicException('Token after T_USE not T_WHITESPACE');
+            throw new ParseErrorException('Token after T_USE not T_WHITESPACE');
         }
 
         $use = '';
@@ -155,11 +156,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
 
         if ($tokens[$stackPtr]['type'] === 'T_AS') {
             if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
-                throw new \LogicException('Token after T_AS not T_WHITESPACE');
+                throw new ParseErrorException('Token after T_AS not T_WHITESPACE');
             }
 
             if ($tokens[$stackPtr + 2]['type'] !== 'T_STRING') {
-                throw new \LogicException('T_STRING expected after [T_AS][T_WHITESPACE]');
+                throw new ParseErrorException('T_STRING expected after [T_AS][T_WHITESPACE]');
             }
 
             $alias = $tokens[$stackPtr + 2]['content'];
@@ -179,7 +180,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         }
 
         if ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
-            throw new \LogicException('Parse error after T_USE, T_SEMICOLON expected');
+            throw new ParseErrorException('Parse error after T_USE, T_SEMICOLON expected');
         }
 
         $this->imports[strtolower($alias)] = $use;
