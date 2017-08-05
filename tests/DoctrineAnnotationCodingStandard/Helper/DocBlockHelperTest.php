@@ -30,7 +30,7 @@ class DocBlockHelperTest extends TestCase
     public function testGetVarTagContentPlain()
     {
         $file = $this->checkString('/** @var foo */', DummySniff::class);
-        $this->assertSame("foo", DocBlockHelper::getVarTagContent($file, 1));
+        $this->assertSame('foo', DocBlockHelper::getVarTagContent($file, 1));
     }
 
     /**
