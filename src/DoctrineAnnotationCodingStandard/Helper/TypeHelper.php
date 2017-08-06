@@ -6,13 +6,16 @@ use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\BooleanType;
+use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\FloatType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\NullableType;
+use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\ResourceType;
 use DoctrineAnnotationCodingStandard\Types\StringType;
 use DoctrineAnnotationCodingStandard\Types\Type;
+use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 
 class TypeHelper
 {
@@ -83,6 +86,15 @@ class TypeHelper
 
             case 'array':
                 return new ArrayType(new MixedType());
+
+            case '\\Doctrine\\Common\\Collections\\Collection':
+                return new CollectionType(new MixedType());
         }
+
+        if ($varTagContent[0] === '\\') {
+            return new ObjectType(substr($varTagContent, 1));
+        }
+
+        return new UnqualifiedObjectType($varTagContent);
     }
 }

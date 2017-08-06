@@ -2,7 +2,9 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
-class CollectionType implements Type
+use Doctrine\Common\Collections\Collection;
+
+class CollectionType extends ObjectType
 {
     /**
      * @var Type
@@ -11,6 +13,16 @@ class CollectionType implements Type
 
     public function __construct(Type $itemType)
     {
+        parent::__construct(Collection::class);
+
         $this->itemType = $itemType;
+    }
+
+    /**
+     * @return Type
+     */
+    public function getItemType(): Type
+    {
+        return $this->itemType;
     }
 }

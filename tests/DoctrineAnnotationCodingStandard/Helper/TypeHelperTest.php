@@ -6,13 +6,16 @@ use DoctrineAnnotationCodingStandard\Helper\TypeHelper;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\BooleanType;
+use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\FloatType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\NullableType;
+use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\ResourceType;
 use DoctrineAnnotationCodingStandard\Types\StringType;
 use DoctrineAnnotationCodingStandard\Types\Type;
+use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use PHPUnit\Framework\TestCase;
 
 class TypeHelperTest extends TestCase
@@ -61,5 +64,21 @@ class TypeHelperTest extends TestCase
     public function testFromStringWithMultipleNull()
     {
         $this->assertEquals(new NullableType(new BooleanType()), TypeHelper::fromString('null|boolean|null'));
+    }
+
+    public function testFromStringWithUntypedCollection()
+    {
+        $type = TypeHelper::fromString('\\Doctrine\\Common\\Collections\\Collection');
+        $this->assertEquals(new CollectionType(new MixedType()), $type);
+    }
+
+    public function testFromStringWithFqcn()
+    {
+        $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime'));
+    }
+
+    public function testFromStringWithUnqualifiedClassname()
+    {
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), TypeHelper::fromString('Foo'));
     }
 }
