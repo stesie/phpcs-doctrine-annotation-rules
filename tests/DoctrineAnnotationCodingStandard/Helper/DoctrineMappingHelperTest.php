@@ -4,7 +4,8 @@ namespace DoctrineAnnotationCodingStandardTests\Helper;
 
 use Doctrine\ORM\Mapping;
 use DoctrineAnnotationCodingStandard\Helper\DoctrineMappingHelper;
-use PHPUnit\Framework\TestCase;
+use DoctrineAnnotationCodingStandardTests\Sniffs\Commenting\DummySniff;
+use DoctrineAnnotationCodingStandardTests\Sniffs\TestCase;
 
 class DoctrineMappingHelperTest extends TestCase
 {
@@ -95,5 +96,53 @@ class DoctrineMappingHelperTest extends TestCase
 
             [ 'object', 'object' ],
         ];
+    }
+
+    public function testGetTypeFromAnnotationMappedColumn()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Column(type="date") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('\\DateTime', DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedEmbedded()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Embedded(class="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedOneToOne()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToOne(targetEntity="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedManyToOne()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToOne(targetEntity="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedOneToMany()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToMany(targetEntity="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('Collection|Foo[]', DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedManyToMany()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToMany(targetEntity="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertSame('Collection|Foo[]', DoctrineMappingHelper::getMappedType($annotations));
     }
 }

@@ -8,6 +8,7 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Sniffs;
 
+use DoctrineAnnotationCodingStandardTests\Sniffs\Commenting\DummySniff;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\DummyFile;
@@ -166,5 +167,16 @@ abstract class TestCase extends BaseTestCase
     protected function getSniffClassName(): string
     {
         return preg_replace('/Tests?/', '', get_class($this));
+    }
+
+    protected function getSniff(): DummySniff
+    {
+        $sniff = reset($this->codeSniffer->ruleset->sniffs);
+
+        if (!$sniff instanceof DummySniff) {
+            throw new \LogicException();
+        }
+
+        return $sniff;
     }
 }

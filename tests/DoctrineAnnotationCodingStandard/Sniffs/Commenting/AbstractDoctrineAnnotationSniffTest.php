@@ -85,15 +85,4 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
             ['use Foo\Bar As Bar <=>;'],
         ];
     }
-
-    private function getSniff(): DummySniff
-    {
-        $sniff = reset($this->codeSniffer->ruleset->sniffs);
-
-        if (!$sniff instanceof DummySniff) {
-            throw new \LogicException();
-        }
-
-        return $sniff;
-    }
 }

@@ -12,19 +12,7 @@ class DoctrineMappingHelper
      */
     public static function isDoctrineMappedProperty(array $annotations): bool
     {
-        foreach ($annotations as $doctrineTag) {
-            switch (get_class($doctrineTag)) {
-                case Mapping\Column::class:
-                case Mapping\Embedded::class:
-                case Mapping\OneToOne::class:
-                case Mapping\OneToMany::class:
-                case Mapping\ManyToOne::class:
-                case Mapping\ManyToMany::class:
-                    return true;
-            }
-        }
-
-        return false;
+        return self::getPropertyMappingAnnotation($annotations) !== null;
     }
 
     /**
@@ -101,5 +89,58 @@ class DoctrineMappingHelper
 
         // Entity types just fall through
         return $doctrineType;
+    }
+
+    /**
+     * @param array $annotations
+     * @return string
+     */
+    public static function getMappedType(array $annotations): string
+    {
+        $mappingAnnotation = self::getPropertyMappingAnnotation($annotations);
+
+        if ($mappingAnnotation === null) {
+            throw new \InvalidArgumentException('property is not mapped');
+        }
+
+        switch (get_class($mappingAnnotation)) {
+            case Mapping\Column::class:
+                return self::getTypeFromDoctrineType($mappingAnnotation->type);
+
+            case Mapping\Embedded::class:
+                return $mappingAnnotation->class;
+
+            case Mapping\OneToOne::class:
+            case Mapping\ManyToOne::class:
+                return $mappingAnnotation->targetEntity;
+
+            case Mapping\OneToMany::class:
+            case Mapping\ManyToMany::class:
+                return \sprintf('Collection|%s[]', $mappingAnnotation->targetEntity);
+
+            default:
+                throw new \LogicException();
+        }
+    }
+
+    /**
+     * @param array $annotations
+     * @return Mapping\Column|Mapping\Embedded|Mapping\OneToOne|Mapping\OneToMany|Mapping\ManyToOne|Mapping\ManyToMany|null
+     */
+    private static function getPropertyMappingAnnotation(array $annotations)
+    {
+        foreach ($annotations as $doctrineTag) {
+            switch (get_class($doctrineTag)) {
+                case Mapping\Column::class:
+                case Mapping\Embedded::class:
+                case Mapping\OneToOne::class:
+                case Mapping\OneToMany::class:
+                case Mapping\ManyToOne::class:
+                case Mapping\ManyToMany::class:
+                    return $doctrineTag;
+            }
+        }
+
+        return null;
     }
 }
