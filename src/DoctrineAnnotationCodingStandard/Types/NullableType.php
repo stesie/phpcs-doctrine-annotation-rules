@@ -2,7 +2,7 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
-class ArrayType implements Type
+class NullableType implements Type
 {
     /**
      * @var Type
@@ -12,5 +12,13 @@ class ArrayType implements Type
     public function __construct(Type $itemType)
     {
         $this->itemType = $itemType;
+    }
+
+    /**
+     * @return Type
+     */
+    public function getItemType(): Type
+    {
+        return $this->itemType;
     }
 }
