@@ -46,4 +46,54 @@ class DoctrineMappingHelperTest extends TestCase
             [ 'class' => \stdClass::class, 'mappingInfo' => [ 'isMapped' => false, 'isJoin' => false ]],
         ];
     }
+
+    /**
+     * @dataProvider doctrineTypeMappingProvider
+     * @param string $doctrineType
+     * @param string $phpType
+     */
+    public function testGetTypeFromDoctrineType(string $doctrineType, string $phpType)
+    {
+        $this->assertSame($phpType, DoctrineMappingHelper::getTypeFromDoctrineType($doctrineType));
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function doctrineTypeMappingProvider(): array
+    {
+        return [
+            [ 'smallint', 'int' ],
+            [ 'integer', 'int' ],
+            [ 'bigint', 'int' ],
+
+            [ 'decimal', 'string' ],
+            [ 'float', 'float' ],
+
+            [ 'string', 'string' ],
+            [ 'text', 'string' ],
+            [ 'guid', 'string' ],
+
+            [ 'binary', 'resource' ],
+            [ 'blob', 'resource' ],
+
+            [ 'boolean', 'bool' ],
+            [ 'date', '\\DateTime' ],
+            [ 'date_immutable', '\\DateTimeImmutable' ],
+            [ 'datetime', '\\DateTime' ],
+            [ 'datetime_immutable', '\\DateTimeImmutable' ],
+            [ 'datetimez', '\\DateTime' ],
+            [ 'datetimez_immutable', '\\DateTimeImmutable' ],
+            [ 'time', '\\DateTime' ],
+            [ 'time_immutable', '\\DateTimeImmutable' ],
+            [ 'dateinterval', '\\DateInterval' ],
+
+            [ 'array', 'array' ],
+            [ 'simple_array', 'array' ],
+            [ 'json', 'array' ],
+            [ 'json_array', 'array' ],
+
+            [ 'object', 'object' ],
+        ];
+    }
 }

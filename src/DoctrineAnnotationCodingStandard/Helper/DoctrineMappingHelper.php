@@ -45,4 +45,61 @@ class DoctrineMappingHelper
 
         return false;
     }
+
+    /**
+     * @param string $doctrineType
+     * @return string
+     */
+    public static function getTypeFromDoctrineType(string $doctrineType): string
+    {
+        switch ($doctrineType) {
+            case 'bigint':
+            case 'integer':
+            case 'smallint':
+                return 'int';
+
+            case 'float':
+                return 'float';
+
+            case 'decimal':
+            case 'string':
+            case 'text':
+            case 'guid':
+                return 'string';
+
+            case 'binary':
+            case 'blob':
+                return 'resource';
+
+            case 'boolean':
+                return 'bool';
+
+            case 'date':
+            case 'datetime':
+            case 'datetimez':
+            case 'time':
+                return '\\DateTime';
+
+            case 'date_immutable':
+            case 'datetime_immutable':
+            case 'datetimez_immutable':
+            case 'time_immutable':
+                return '\\DateTimeImmutable';
+
+            case 'dateinterval':
+                return '\\DateInterval';
+
+            case 'array':
+            case 'simple_array':
+            case 'json':
+            case 'json_array':
+                return 'array';
+
+            case 'object':
+                return 'object';
+        }
+
+        // Entity types just fall through
+        return $doctrineType;
+    }
 }
