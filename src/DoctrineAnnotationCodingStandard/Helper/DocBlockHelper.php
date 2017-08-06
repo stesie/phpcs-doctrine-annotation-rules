@@ -112,4 +112,20 @@ class DocBlockHelper
         }
         return $tagName;
     }
+
+    /**
+     * @param string $className
+     * @param array $annotations
+     * @return object|null
+     */
+    public static function findAnnotationByClass(string $className, array $annotations)
+    {
+        foreach ($annotations as $doctrineTag) {
+            if ($className === get_class($doctrineTag)) {
+                return $doctrineTag;
+            }
+        }
+
+        return null;
+    }
 }

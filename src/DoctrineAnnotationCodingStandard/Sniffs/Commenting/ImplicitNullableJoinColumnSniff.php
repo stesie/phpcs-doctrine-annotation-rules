@@ -24,7 +24,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
         }
 
         /** @var JoinColumn|null $joinColumn */
-        $joinColumn = DoctrineMappingHelper::findAnnotationByClass(JoinColumn::class, $annotations);
+        $joinColumn = DocBlockHelper::findAnnotationByClass(JoinColumn::class, $annotations);
 
         if ($joinColumn === null) {
             $error = 'There must be a @JoinColumn tag on Doctrine mapped relations';
