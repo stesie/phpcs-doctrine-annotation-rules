@@ -13,4 +13,12 @@ class ArrayType implements Type
     {
         $this->itemType = $itemType;
     }
+
+    /**
+     * @return Type
+     */
+    public function getItemType(): Type
+    {
+        return $this->itemType;
+    }
 }
