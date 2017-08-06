@@ -35,6 +35,14 @@ class ObjectType implements Type
      */
     public function toString(string $namespace = null, ImportClassMap $imports): string
     {
-        return $this->fqcn;
+        $alias = $imports->aliasByClass($this->fqcn);
+
+        if ($alias !== false) {
+            return $alias;
+        } elseif ($namespace === null) {
+            return $this->fqcn;
+        } else {
+            return '\\' . $this->fqcn;
+        }
     }
 }

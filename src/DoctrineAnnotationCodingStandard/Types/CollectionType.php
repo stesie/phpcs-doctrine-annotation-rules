@@ -36,11 +36,7 @@ class CollectionType extends ObjectType implements QualifyableObjectType
      */
     public function toString(string $namespace = null, ImportClassMap $imports): string
     {
-        $collectionClass = $imports->aliasByClass(Collection::class);
-
-        if ($collectionClass === false) {
-            $collectionClass = '\\' . Collection::class;
-        }
+        $collectionClass = parent::toString($namespace, $imports);
 
         return \sprintf('%s[]|%s', $this->itemType->toString($namespace, $imports), $collectionClass);
     }

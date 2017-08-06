@@ -27,7 +27,7 @@ class ImportClassMap
 
     /**
      * @param string $className
-     * @return bool|string
+     * @return string|null
      */
     public function aliasByClass(string $className)
     {
