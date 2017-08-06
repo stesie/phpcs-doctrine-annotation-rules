@@ -6,7 +6,7 @@ use DoctrineAnnotationCodingStandard\Helper\DocBlockHelper;
 use DoctrineAnnotationCodingStandard\Helper\DoctrineMappingHelper;
 use PHP_CodeSniffer\Files\File;
 
-class VarTagMissingSniff extends AbstractDoctrineAnnotationSniff
+class VarTagSniff extends AbstractDoctrineAnnotationSniff
 {
     const CODE_NO_VAR_TAG = 'NoVarTag';
 
