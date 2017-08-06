@@ -25,9 +25,13 @@ class ImportClassMap
         return $this->forwardMap[strtolower($alias)];
     }
 
-    public function aliasByClass(string $className): string
+    /**
+     * @param string $className
+     * @return bool|string
+     */
+    public function aliasByClass(string $className)
     {
-        return $this->backwardMap[$className];
+        return $this->backwardMap[$className] ?? false;
     }
 
     public function hasAlias(string $alias): bool
