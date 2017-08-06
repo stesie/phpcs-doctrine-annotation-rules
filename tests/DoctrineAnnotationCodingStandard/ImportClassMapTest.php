@@ -22,4 +22,28 @@ class ImportClassMapTest extends TestCase
 
         $this->assertSame('Foo', $classMap->aliasByClass('Foo\\Bar'));
     }
+
+    public function testHasAlias()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('Foo', 'Foo\\Bar');
+
+        $this->assertTrue($classMap->hasAlias('Foo'));
+    }
+
+    public function testHasAliasMissing()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('Foo', 'Foo\\Bar');
+
+        $this->assertFalse($classMap->hasAlias('NoSuchAlias'));
+    }
+
+    public function testToArray()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('Foo', 'Foo\\Bar');
+
+        $this->assertSame(['foo' => 'Foo\\Bar'], $classMap->toArray());
+    }
 }

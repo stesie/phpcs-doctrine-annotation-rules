@@ -3,6 +3,7 @@
 namespace DoctrineAnnotationCodingStandard\Types;
 
 use Doctrine\Common\Collections\Collection;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 
 class CollectionType extends ObjectType implements QualifyableObjectType
 {
@@ -30,10 +31,10 @@ class CollectionType extends ObjectType implements QualifyableObjectType
 
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return string
      */
-    public function toString(string $namespace = null, array $imports): string
+    public function toString(string $namespace = null, ImportClassMap $imports): string
     {
         $collectionClass = array_search(Collection::class, $imports);
 

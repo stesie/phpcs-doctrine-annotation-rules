@@ -5,17 +5,16 @@ namespace DoctrineAnnotationCodingStandard\Sniffs\Commenting;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
 use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 abstract class AbstractDoctrineAnnotationSniff implements Sniff
 {
     /**
-     * Imports used by current file (lowercase alias as key)
-     *
-     * @var string[]
+     * @var ImportClassMap
      */
-    private $imports = [];
+    private $imports;
 
     /**
      * The current file's namespace, if any
@@ -30,6 +29,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      * @param array $annotations
      */
     abstract protected function sniffDocblock(File $phpcsFile, int $stackPtr, array $annotations);
+
+    public function __construct()
+    {
+        $this->imports = new ImportClassMap();
+    }
 
     /**
      * @return array
@@ -75,9 +79,9 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     }
 
     /**
-     * @return string[]
+     * @return ImportClassMap
      */
-    public function getImports(): array
+    public function getImports(): ImportClassMap
     {
         return $this->imports;
     }
@@ -195,7 +199,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
             throw new ParseErrorException('Parse error after T_USE, T_SEMICOLON expected');
         }
 
-        $this->imports[strtolower($alias)] = $use;
+        $this->imports->add($alias, $use);
     }
 
     /**
@@ -209,7 +213,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
 
         $parser = new DocParser();
         $parser->setIgnoreNotImportedAnnotations(true);
-        $parser->setImports($this->imports);
+        $parser->setImports($this->imports->toArray());
 
         return $parser->parse($content);
     }

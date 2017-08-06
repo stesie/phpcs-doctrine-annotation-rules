@@ -2,6 +2,7 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Types;
 
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
@@ -13,12 +14,12 @@ class ArrayTypeTest extends TestCase
     public function testQualificationWithUnqualifiableItemType()
     {
         $type = new ArrayType(new IntegerType());
-        $this->assertSame($type, $type->qualify(null, []));
+        $this->assertSame($type, $type->qualify(null, new ImportClassMap()));
     }
 
     public function testQualification()
     {
         $type = new ArrayType(new UnqualifiedObjectType('DateTime'));
-        $this->assertEquals(new ArrayType(new ObjectType(\DateTime::class)), $type->qualify(null, []));
+        $this->assertEquals(new ArrayType(new ObjectType(\DateTime::class)), $type->qualify(null, new ImportClassMap()));
     }
 }

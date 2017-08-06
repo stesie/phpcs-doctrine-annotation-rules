@@ -2,6 +2,7 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Types;
 
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
@@ -12,32 +13,40 @@ class UnqualifiedObjectTypeTest extends TestCase
 {
     public function testNamespaceQualificationWithoutNamespace()
     {
-        $result = (new UnqualifiedObjectType('DateTime'))->qualify(null, []);
+        $result = (new UnqualifiedObjectType('DateTime'))->qualify(null, new ImportClassMap());
         $this->assertEquals(new ObjectType(\DateTime::class), $result);
     }
 
     public function testNamespaceQualification()
     {
-        $result = (new UnqualifiedObjectType('Bar'))->qualify('Foo', []);
+        $result = (new UnqualifiedObjectType('Bar'))->qualify('Foo', new ImportClassMap());
         $this->assertEquals(new ObjectType('Foo\\Bar'), $result);
     }
 
     public function testImportQualification()
     {
-        $result = (new UnqualifiedObjectType('Bar'))->qualify('Something', ['bar' => 'Foo\\Bar']);
+        $classMap = new ImportClassMap();
+        $classMap->add('Bar', 'Foo\\Bar');
+
+        $result = (new UnqualifiedObjectType('Bar'))->qualify('Something', $classMap);
         $this->assertEquals(new ObjectType('Foo\\Bar'), $result);
     }
 
     public function testImportQualificationSubpart()
     {
-        $result = (new UnqualifiedObjectType('Bar\Baz'))->qualify('Something', ['bar' => 'Foo\\Bar']);
+        $classMap = new ImportClassMap();
+        $classMap->add('Bar', 'Foo\\Bar');
+
+        $result = (new UnqualifiedObjectType('Bar\Baz'))->qualify('Something', $classMap);
         $this->assertEquals(new ObjectType('Foo\\Bar\Baz'), $result);
     }
 
     public function testQualificationToCollection()
     {
-        $result = (new UnqualifiedObjectType('Collection'))
-            ->qualify('Something', ['collection' => 'Doctrine\\Common\\Collections\\Collection']);
+        $classMap = new ImportClassMap();
+        $classMap->add('Collection', 'Doctrine\\Common\\Collections\\Collection');
+
+        $result = (new UnqualifiedObjectType('Collection'))->qualify('Something', $classMap);
         $this->assertEquals(new CollectionType(new MixedType()), $result);
     }
 }

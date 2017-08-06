@@ -4,6 +4,7 @@ namespace DoctrineAnnotationCodingStandardTests\Helper;
 
 use Doctrine\ORM\Mapping as ORM;
 use DoctrineAnnotationCodingStandard\Helper\DocBlockHelper;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandardTests\Sniffs\Commenting\DummySniff;
 use DoctrineAnnotationCodingStandardTests\Sniffs\TestCase;
 
@@ -57,7 +58,9 @@ class DocBlockHelperTest extends TestCase
     public function testFindTagByClassThrowsIfCalledOnWrongToken()
     {
         $file = $this->checkString('/** @var foo */', DummySniff::class);
-        DocBlockHelper::findTagByClass($file, 0, [], \stdClass::class);
+        $classMap = new ImportClassMap();
+
+        DocBlockHelper::findTagByClass($file, 0, $classMap, \stdClass::class);
     }
 
     /**
@@ -66,14 +69,19 @@ class DocBlockHelperTest extends TestCase
     public function testFindTagByClassThrowsIfStackPtrBeyondEof()
     {
         $file = $this->checkString('/** @var foo */', DummySniff::class);
-        DocBlockHelper::findTagByClass($file, count($file->getTokens()), [], \stdClass::class);
+        $classMap = new ImportClassMap();
+
+        DocBlockHelper::findTagByClass($file, count($file->getTokens()), $classMap, \stdClass::class);
     }
 
     public function testFindTagByClass()
     {
         $file = $this->checkString('/** @ORM\JoinColumn() */', DummySniff::class);
 
-        $tag = DocBlockHelper::findTagByClass($file, 1, ['orm' => 'Doctrine\\ORM\\Mapping'], ORM\JoinColumn::class);
+        $classMap = new ImportClassMap();
+        $classMap->add('ORM', 'Doctrine\\ORM\\Mapping');
+
+        $tag = DocBlockHelper::findTagByClass($file, 1, $classMap, ORM\JoinColumn::class);
         $this->assertSame('()', $tag);
     }
 
@@ -81,7 +89,10 @@ class DocBlockHelperTest extends TestCase
     {
         $file = $this->checkString('/** @ORM\JoinColumn   () */', DummySniff::class);
 
-        $tag = DocBlockHelper::findTagByClass($file, 1, ['orm' => 'Doctrine\\ORM\\Mapping'], ORM\JoinColumn::class);
+        $classMap = new ImportClassMap();
+        $classMap->add('ORM', 'Doctrine\\ORM\\Mapping');
+
+        $tag = DocBlockHelper::findTagByClass($file, 1, $classMap, ORM\JoinColumn::class);
         $this->assertSame('()', $tag);
     }
 
@@ -89,7 +100,10 @@ class DocBlockHelperTest extends TestCase
     {
         $file = $this->checkString('/** @ORM\Column() */', DummySniff::class);
 
-        $tag = DocBlockHelper::findTagByClass($file, 1, ['orm' => 'Doctrine\\ORM\\Mapping'], ORM\JoinColumn::class);
+        $classMap = new ImportClassMap();
+        $classMap->add('ORM', 'Doctrine\\ORM\\Mapping');
+
+        $tag = DocBlockHelper::findTagByClass($file, 1, $classMap, ORM\JoinColumn::class);
         $this->assertSame(null, $tag);
     }
 }

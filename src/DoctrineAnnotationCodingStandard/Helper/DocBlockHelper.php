@@ -3,6 +3,7 @@
 namespace DoctrineAnnotationCodingStandard\Helper;
 
 use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use PHP_CodeSniffer\Files\File;
 
 class DocBlockHelper
@@ -38,11 +39,11 @@ class DocBlockHelper
     /**
      * @param File $phpcsFile
      * @param int $stackPtr
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @param string $class
      * @return string|null
      */
-    public static function findTagByClass(File $phpcsFile, int $stackPtr, array $imports, string $class)
+    public static function findTagByClass(File $phpcsFile, int $stackPtr, ImportClassMap $imports, string $class)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -96,18 +97,18 @@ class DocBlockHelper
     }
 
     /**
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @param string $tagName
      * @return string
      */
-    private static function expandClassName(array $imports, string $tagName): string
+    private static function expandClassName(ImportClassMap $imports, string $tagName): string
     {
         $nsSeparator = strpos($tagName, '\\');
         if ($nsSeparator !== false) {
             $alias = strtolower(substr($tagName, 0, $nsSeparator));
 
-            if (isset($imports[$alias])) {
-                $tagName = $imports[$alias] . substr($tagName, $nsSeparator);
+            if ($imports->hasAlias($alias)) {
+                $tagName = $imports->classByAlias($alias) . substr($tagName, $nsSeparator);
             }
         }
         return $tagName;

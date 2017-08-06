@@ -2,6 +2,8 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
+use DoctrineAnnotationCodingStandard\ImportClassMap;
+
 class NullableType implements Type, QualifyableObjectType
 {
     use QualifyViaItemTypeDelegationTrait;
@@ -26,10 +28,10 @@ class NullableType implements Type, QualifyableObjectType
 
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return string
      */
-    public function toString(string $namespace = null, array $imports): string
+    public function toString(string $namespace = null, ImportClassMap $imports): string
     {
         return \sprintf('%s|null', $this->itemType->toString($namespace, $imports));
     }

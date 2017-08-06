@@ -2,12 +2,14 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
+use DoctrineAnnotationCodingStandard\ImportClassMap;
+
 interface Type
 {
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return string
      */
-    public function toString(string $namespace = null, array $imports): string;
+    public function toString(string $namespace = null, ImportClassMap $imports): string;
 }

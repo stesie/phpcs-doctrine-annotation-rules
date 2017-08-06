@@ -29,4 +29,17 @@ class ImportClassMap
     {
         return $this->backwardMap[$className];
     }
+
+    public function hasAlias(string $alias): bool
+    {
+        return isset($this->forwardMap[strtolower($alias)]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function toArray(): array
+    {
+        return $this->forwardMap;
+    }
 }

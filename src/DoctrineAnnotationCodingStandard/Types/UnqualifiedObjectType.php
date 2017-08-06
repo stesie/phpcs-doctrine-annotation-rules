@@ -3,6 +3,7 @@
 namespace DoctrineAnnotationCodingStandard\Types;
 
 use Doctrine\Common\Collections\Collection;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 
 class UnqualifiedObjectType implements Type, QualifyableObjectType
 {
@@ -18,16 +19,15 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
 
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return Type
      */
-    public function qualify(string $namespace = null, array $imports): Type
+    public function qualify(string $namespace = null, ImportClassMap $imports): Type
     {
         $parts = explode('\\', $this->className);
-        $key = strtolower($parts[0]);
 
-        if (isset($imports[$key])) {
-            $parts[0] = $imports[$key];
+        if ($imports->hasAlias($parts[0])) {
+            $parts[0] = $imports->classByAlias($parts[0]);
             $fqcn = implode('\\', $parts);
         } elseif ($namespace === null) {
             $fqcn = $this->className;
@@ -44,10 +44,10 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
 
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return string
      */
-    public function toString(string $namespace = null, array $imports): string
+    public function toString(string $namespace = null, ImportClassMap $imports): string
     {
         return $this->className;
     }

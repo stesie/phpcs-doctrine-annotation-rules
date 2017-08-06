@@ -2,6 +2,8 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
+use DoctrineAnnotationCodingStandard\ImportClassMap;
+
 class ArrayType implements Type, QualifyableObjectType
 {
     use QualifyViaItemTypeDelegationTrait;
@@ -26,10 +28,10 @@ class ArrayType implements Type, QualifyableObjectType
 
     /**
      * @param string|null $namespace
-     * @param string[] $imports
+     * @param ImportClassMap $imports
      * @return string
      */
-    public function toString(string $namespace = null, array $imports): string
+    public function toString(string $namespace = null, ImportClassMap $imports): string
     {
         return \sprintf('%s[]', $this->itemType->toString($namespace, $imports));
     }
