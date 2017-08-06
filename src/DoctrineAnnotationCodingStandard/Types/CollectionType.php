@@ -4,8 +4,10 @@ namespace DoctrineAnnotationCodingStandard\Types;
 
 use Doctrine\Common\Collections\Collection;
 
-class CollectionType extends ObjectType
+class CollectionType extends ObjectType implements QualifyableObjectType
 {
+    use QualifyViaItemTypeDelegationTrait;
+
     /**
      * @var Type
      */

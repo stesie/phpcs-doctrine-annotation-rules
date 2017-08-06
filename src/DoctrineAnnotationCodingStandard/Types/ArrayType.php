@@ -2,8 +2,10 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
-class ArrayType implements Type
+class ArrayType implements Type, QualifyableObjectType
 {
+    use QualifyViaItemTypeDelegationTrait;
+
     /**
      * @var Type
      */

@@ -4,7 +4,7 @@ namespace DoctrineAnnotationCodingStandard\Types;
 
 use Doctrine\Common\Collections\Collection;
 
-class UnqualifiedObjectType implements Type
+class UnqualifiedObjectType implements Type, QualifyableObjectType
 {
     /**
      * @var string

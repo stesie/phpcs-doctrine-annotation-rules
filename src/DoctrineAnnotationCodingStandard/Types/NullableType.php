@@ -2,8 +2,10 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
-class NullableType implements Type
+class NullableType implements Type, QualifyableObjectType
 {
+    use QualifyViaItemTypeDelegationTrait;
+
     /**
      * @var Type
      */
