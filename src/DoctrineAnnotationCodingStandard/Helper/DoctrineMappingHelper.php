@@ -2,7 +2,20 @@
 
 namespace DoctrineAnnotationCodingStandard\Helper;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping;
+use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
+use DoctrineAnnotationCodingStandard\Types\ArrayType;
+use DoctrineAnnotationCodingStandard\Types\BooleanType;
+use DoctrineAnnotationCodingStandard\Types\CollectionType;
+use DoctrineAnnotationCodingStandard\Types\FloatType;
+use DoctrineAnnotationCodingStandard\Types\IntegerType;
+use DoctrineAnnotationCodingStandard\Types\MixedType;
+use DoctrineAnnotationCodingStandard\Types\ObjectType;
+use DoctrineAnnotationCodingStandard\Types\ResourceType;
+use DoctrineAnnotationCodingStandard\Types\StringType;
+use DoctrineAnnotationCodingStandard\Types\Type;
+use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 
 class DoctrineMappingHelper
 {
@@ -36,66 +49,66 @@ class DoctrineMappingHelper
 
     /**
      * @param string $doctrineType
-     * @return string
+     * @return Type
      */
-    public static function getTypeFromDoctrineType(string $doctrineType): string
+    public static function getTypeFromDoctrineType(string $doctrineType): Type
     {
         switch ($doctrineType) {
             case 'bigint':
             case 'integer':
             case 'smallint':
-                return 'int';
+                return new IntegerType();
 
             case 'float':
-                return 'float';
+                return new FloatType();
 
             case 'decimal':
             case 'string':
             case 'text':
             case 'guid':
-                return 'string';
+                return new StringType();
 
             case 'binary':
             case 'blob':
-                return 'resource';
+                return new ResourceType();
 
             case 'boolean':
-                return 'bool';
+                return new BooleanType();
 
             case 'date':
             case 'datetime':
             case 'datetimez':
             case 'time':
-                return '\\DateTime';
+                return new ObjectType(\DateTime::class);
 
             case 'date_immutable':
             case 'datetime_immutable':
             case 'datetimez_immutable':
             case 'time_immutable':
-                return '\\DateTimeImmutable';
+                return new ObjectType(DateTimeImmutable::class);
 
             case 'dateinterval':
-                return '\\DateInterval';
+                return new ObjectType(\DateInterval::class);
 
             case 'array':
             case 'simple_array':
             case 'json':
             case 'json_array':
-                return 'array';
+                return new ArrayType(new MixedType());
 
             case 'object':
-                return 'object';
+                return new AnyObjectType();
         }
 
         // Entity types just fall through
-        return $doctrineType;
+        return new UnqualifiedObjectType($doctrineType);
     }
 
     /**
      * @param array $annotations
-     * @return string
+     * @return Type
      */
-    public static function getMappedType(array $annotations): string
+    public static function getMappedType(array $annotations): Type
     {
         $mappingAnnotation = self::getPropertyMappingAnnotation($annotations);
 
@@ -108,15 +121,15 @@ class DoctrineMappingHelper
                 return self::getTypeFromDoctrineType($mappingAnnotation->type);
 
             case Mapping\Embedded::class:
-                return $mappingAnnotation->class;
+                return new UnqualifiedObjectType($mappingAnnotation->class);
 
             case Mapping\OneToOne::class:
             case Mapping\ManyToOne::class:
-                return $mappingAnnotation->targetEntity;
+                return new UnqualifiedObjectType($mappingAnnotation->targetEntity);
 
             case Mapping\OneToMany::class:
             case Mapping\ManyToMany::class:
-                return \sprintf('Collection|%s[]', $mappingAnnotation->targetEntity);
+                return new CollectionType(new UnqualifiedObjectType($mappingAnnotation->targetEntity));
 
             default:
                 throw new \LogicException();

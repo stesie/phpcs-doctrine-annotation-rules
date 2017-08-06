@@ -4,6 +4,18 @@ namespace DoctrineAnnotationCodingStandardTests\Helper;
 
 use Doctrine\ORM\Mapping;
 use DoctrineAnnotationCodingStandard\Helper\DoctrineMappingHelper;
+use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
+use DoctrineAnnotationCodingStandard\Types\ArrayType;
+use DoctrineAnnotationCodingStandard\Types\BooleanType;
+use DoctrineAnnotationCodingStandard\Types\CollectionType;
+use DoctrineAnnotationCodingStandard\Types\FloatType;
+use DoctrineAnnotationCodingStandard\Types\IntegerType;
+use DoctrineAnnotationCodingStandard\Types\MixedType;
+use DoctrineAnnotationCodingStandard\Types\ObjectType;
+use DoctrineAnnotationCodingStandard\Types\ResourceType;
+use DoctrineAnnotationCodingStandard\Types\StringType;
+use DoctrineAnnotationCodingStandard\Types\Type;
+use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use DoctrineAnnotationCodingStandardTests\Sniffs\Commenting\DummySniff;
 use DoctrineAnnotationCodingStandardTests\Sniffs\TestCase;
 
@@ -51,50 +63,50 @@ class DoctrineMappingHelperTest extends TestCase
     /**
      * @dataProvider doctrineTypeMappingProvider
      * @param string $doctrineType
-     * @param string $phpType
+     * @param Type $phpType
      */
-    public function testGetTypeFromDoctrineType(string $doctrineType, string $phpType)
+    public function testGetTypeFromDoctrineType(string $doctrineType, Type $phpType)
     {
-        $this->assertSame($phpType, DoctrineMappingHelper::getTypeFromDoctrineType($doctrineType));
+        $this->assertEquals($phpType, DoctrineMappingHelper::getTypeFromDoctrineType($doctrineType));
     }
 
     /**
-     * @return string[][]
+     * @return mixed[][]
      */
     public function doctrineTypeMappingProvider(): array
     {
         return [
-            [ 'smallint', 'int' ],
-            [ 'integer', 'int' ],
-            [ 'bigint', 'int' ],
+            [ 'smallint', new IntegerType() ],
+            [ 'integer', new IntegerType() ],
+            [ 'bigint', new IntegerType() ],
 
-            [ 'decimal', 'string' ],
-            [ 'float', 'float' ],
+            [ 'decimal', new StringType() ],
+            [ 'float', new FloatType() ],
 
-            [ 'string', 'string' ],
-            [ 'text', 'string' ],
-            [ 'guid', 'string' ],
+            [ 'string', new StringType() ],
+            [ 'text', new StringType() ],
+            [ 'guid', new StringType() ],
 
-            [ 'binary', 'resource' ],
-            [ 'blob', 'resource' ],
+            [ 'binary', new ResourceType() ],
+            [ 'blob', new ResourceType() ],
 
-            [ 'boolean', 'bool' ],
-            [ 'date', '\\DateTime' ],
-            [ 'date_immutable', '\\DateTimeImmutable' ],
-            [ 'datetime', '\\DateTime' ],
-            [ 'datetime_immutable', '\\DateTimeImmutable' ],
-            [ 'datetimez', '\\DateTime' ],
-            [ 'datetimez_immutable', '\\DateTimeImmutable' ],
-            [ 'time', '\\DateTime' ],
-            [ 'time_immutable', '\\DateTimeImmutable' ],
-            [ 'dateinterval', '\\DateInterval' ],
+            [ 'boolean', new BooleanType() ],
+            [ 'date', new ObjectType(\DateTime::class) ],
+            [ 'date_immutable', new ObjectType(\DateTimeImmutable::class) ],
+            [ 'datetime', new ObjectType(\DateTime::class) ],
+            [ 'datetime_immutable', new ObjectType(\DateTimeImmutable::class) ],
+            [ 'datetimez', new ObjectType(\DateTime::class) ],
+            [ 'datetimez_immutable', new ObjectType(\DateTimeImmutable::class) ],
+            [ 'time', new ObjectType(\DateTime::class) ],
+            [ 'time_immutable', new ObjectType(\DateTimeImmutable::class) ],
+            [ 'dateinterval', new ObjectType(\DateInterval::class) ],
 
-            [ 'array', 'array' ],
-            [ 'simple_array', 'array' ],
-            [ 'json', 'array' ],
-            [ 'json_array', 'array' ],
+            [ 'array', new ArrayType(new MixedType()) ],
+            [ 'simple_array', new ArrayType(new MixedType()) ],
+            [ 'json', new ArrayType(new MixedType()) ],
+            [ 'json_array', new ArrayType(new MixedType()) ],
 
-            [ 'object', 'object' ],
+            [ 'object', new AnyObjectType() ],
         ];
     }
 
@@ -103,7 +115,7 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Column(type="date") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('\\DateTime', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new ObjectType(\DateTime::class), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedEmbedded()
@@ -111,7 +123,7 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Embedded(class="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedOneToOne()
@@ -119,7 +131,7 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToOne(targetEntity="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedManyToOne()
@@ -127,7 +139,7 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToOne(targetEntity="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('Foo', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedOneToMany()
@@ -135,7 +147,7 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToMany(targetEntity="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('Collection|Foo[]', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new CollectionType(new UnqualifiedObjectType('Foo')), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedManyToMany()
@@ -143,6 +155,6 @@ class DoctrineMappingHelperTest extends TestCase
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToMany(targetEntity="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertSame('Collection|Foo[]', DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new CollectionType(new UnqualifiedObjectType('Foo')), DoctrineMappingHelper::getMappedType($annotations));
     }
 }
