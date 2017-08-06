@@ -23,4 +23,14 @@ class NullableType implements Type, QualifyableObjectType
     {
         return $this->itemType;
     }
+
+    /**
+     * @param string|null $namespace
+     * @param string[] $imports
+     * @return string
+     */
+    public function toString(string $namespace = null, array $imports): string
+    {
+        return \sprintf('%s|null', $this->itemType->toString($namespace, $imports));
+    }
 }

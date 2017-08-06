@@ -25,4 +25,14 @@ class ObjectType implements Type
     {
         return $this->fqcn;
     }
+
+    /**
+     * @param string|null $namespace
+     * @param string[] $imports
+     * @return string
+     */
+    public function toString(string $namespace = null, array $imports): string
+    {
+        return $this->fqcn;
+    }
 }
