@@ -29,7 +29,7 @@ class ObjectType implements Type
     {
         $alias = $imports->aliasByClass($this->fqcn);
 
-        if ($alias !== false) {
+        if ($alias !== null) {
             return $alias;
         } elseif ($namespace === null) {
             return $this->fqcn;
