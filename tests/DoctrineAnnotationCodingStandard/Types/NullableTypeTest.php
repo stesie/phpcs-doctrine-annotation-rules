@@ -25,4 +25,8 @@ class NullableTypeTest extends TestCase
         $this->assertEquals(new NullableType(new ObjectType(\DateTime::class)), $qualifiedType);
     }
 
+    public function testToString()
+    {
+        $this->assertSame('int|null', (new NullableType(new IntegerType()))->toString(null, new ImportClassMap()));
+    }
 }

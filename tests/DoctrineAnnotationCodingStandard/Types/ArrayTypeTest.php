@@ -22,4 +22,9 @@ class ArrayTypeTest extends TestCase
         $type = new ArrayType(new UnqualifiedObjectType('DateTime'));
         $this->assertEquals(new ArrayType(new ObjectType(\DateTime::class)), $type->qualify(null, new ImportClassMap()));
     }
+
+    public function testToString()
+    {
+        $this->assertSame('int[]', (new ArrayType(new IntegerType()))->toString(null, new ImportClassMap()));
+    }
 }

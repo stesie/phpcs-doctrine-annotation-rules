@@ -8,6 +8,15 @@ use PHPUnit\Framework\TestCase;
 
 class ObjectTypeTest extends TestCase
 {
+    public function testStripsLeadingBackslash()
+    {
+        $type = new ObjectType('\\DateTime');
+        $this->assertSame(
+            'DateTime',
+            $type->toString(null, new ImportClassMap())
+        );
+    }
+
     public function testToStringPlain()
     {
         $type = new ObjectType(\DateTime::class);
