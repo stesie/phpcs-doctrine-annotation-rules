@@ -2,6 +2,8 @@
 
 namespace DoctrineAnnotationCodingStandard\Types;
 
+use Doctrine\Common\Collections\Collection;
+
 class UnqualifiedObjectType implements Type
 {
     /**
@@ -31,6 +33,10 @@ class UnqualifiedObjectType implements Type
             $fqcn = $this->className;
         } else {
             $fqcn = $namespace . '\\' . $this->className;
+        }
+
+        if ($fqcn === Collection::class) {
+            return new CollectionType(new MixedType());
         }
 
         return new ObjectType($fqcn);

@@ -2,6 +2,8 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Types;
 
+use DoctrineAnnotationCodingStandard\Types\CollectionType;
+use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use PHPUnit\Framework\TestCase;
@@ -30,5 +32,12 @@ class UnqualifiedObjectTypeTest extends TestCase
     {
         $result = (new UnqualifiedObjectType('Bar\Baz'))->qualify('Something', ['bar' => 'Foo\\Bar']);
         $this->assertEquals(new ObjectType('Foo\\Bar\Baz'), $result);
+    }
+
+    public function testQualificationToCollection()
+    {
+        $result = (new UnqualifiedObjectType('Collection'))
+            ->qualify('Something', ['collection' => 'Doctrine\\Common\\Collections\\Collection']);
+        $this->assertEquals(new CollectionType(new MixedType()), $result);
     }
 }
