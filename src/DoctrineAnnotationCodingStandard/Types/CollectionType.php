@@ -22,14 +22,6 @@ class CollectionType extends ObjectType implements QualifyableObjectType
     }
 
     /**
-     * @return Type
-     */
-    public function getItemType(): Type
-    {
-        return $this->itemType;
-    }
-
-    /**
      * @param string|null $namespace
      * @param ImportClassMap $imports
      * @return string

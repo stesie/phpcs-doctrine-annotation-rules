@@ -21,14 +21,6 @@ class ObjectType implements Type
     }
 
     /**
-     * @return string
-     */
-    public function getFqcn(): string
-    {
-        return $this->fqcn;
-    }
-
-    /**
      * @param string|null $namespace
      * @param ImportClassMap $imports
      * @return string
