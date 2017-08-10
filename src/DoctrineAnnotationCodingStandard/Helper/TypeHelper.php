@@ -26,10 +26,10 @@ class TypeHelper
 
         if (count($parts) === 1) {
             if (substr($varTagContent, -2) === '[]') {
-                return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2)));
+                return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $classMap));
             }
 
-            return self::convertPrimitiveType($varTagContent);
+            return self::convertPrimitiveType($varTagContent, $classMap);
         }
 
         if (in_array('null', $parts)) {
@@ -57,9 +57,10 @@ class TypeHelper
 
     /**
      * @param string $varTagContent
+     * @param ImportClassMap $classMap
      * @return Type
      */
-    private static function convertPrimitiveType(string $varTagContent): Type
+    private static function convertPrimitiveType(string $varTagContent, ImportClassMap $classMap): Type
     {
         switch ($varTagContent) {
             case 'int':
@@ -96,6 +97,13 @@ class TypeHelper
             return new ObjectType(substr($varTagContent, 1));
         }
 
-        return new UnqualifiedObjectType($varTagContent);
+        $unqualifiedObject = new UnqualifiedObjectType($varTagContent);
+        $tempQualifiedObject = $unqualifiedObject->qualify(null, $classMap);
+
+        if ($tempQualifiedObject instanceof CollectionType) {
+            return $tempQualifiedObject;
+        }
+
+        return $unqualifiedObject;
     }
 }

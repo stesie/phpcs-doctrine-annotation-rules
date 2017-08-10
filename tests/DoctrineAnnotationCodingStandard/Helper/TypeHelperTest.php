@@ -73,6 +73,15 @@ class TypeHelperTest extends TestCase
         $this->assertEquals(new CollectionType(new MixedType()), $type);
     }
 
+    public function testFromStringWithUntypedCollectionViaUse()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('Collection', 'Doctrine\\Common\\Collections\\Collection');
+
+        $type = TypeHelper::fromString('Collection', $classMap);
+        $this->assertEquals(new CollectionType(new MixedType()), $type);
+    }
+
     public function testFromStringWithFqcn()
     {
         $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime', new ImportClassMap()));
