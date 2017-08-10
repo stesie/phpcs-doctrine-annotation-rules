@@ -36,6 +36,12 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertNoSniffErrors($file);
     }
 
+    public function testIgnoreFunctionUse()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/FunctionUse.inc', DummySniff::class);
+        $this->assertNoSniffErrors($file);
+    }
+
     /**
      * @dataProvider invalidNamespaceStatementProvider
      * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException

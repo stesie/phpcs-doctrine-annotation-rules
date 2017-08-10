@@ -161,6 +161,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         $use = '';
         $stackPtr += 2;
 
+        if ($tokens[$stackPtr]['type'] === 'T_OPEN_PARENTHESIS') {
+            // ignore "function use"
+            return;
+        }
+
         while (in_array($tokens[$stackPtr]['type'], ['T_STRING', 'T_NS_SEPARATOR'])) {
             $use .= $tokens[$stackPtr]['content'];
             $stackPtr++;
