@@ -16,7 +16,6 @@ use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\ResourceType;
 use DoctrineAnnotationCodingStandard\Types\StringType;
 use DoctrineAnnotationCodingStandard\Types\Type;
-use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use PHPUnit\Framework\TestCase;
 
 class TypeHelperTest extends TestCase
