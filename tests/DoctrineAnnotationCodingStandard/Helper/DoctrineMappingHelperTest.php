@@ -40,7 +40,7 @@ class DoctrineMappingHelperTest extends TestCase
     public function testIsDoctrineJoin(string $className, array $mappingInfo)
     {
         $annotation = new $className();
-        $this->assertSame($mappingInfo['isJoin'], DoctrineMappingHelper::isDoctrineJoin([$annotation]));
+        $this->assertSame($mappingInfo['isToOneJoin'], DoctrineMappingHelper::isDoctrineToOneJoin([$annotation]));
     }
 
     /**
@@ -49,14 +49,14 @@ class DoctrineMappingHelperTest extends TestCase
     public function annotationProvider(): array
     {
         return [
-            [ 'class' => Mapping\Column::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => false ]],
-            [ 'class' => Mapping\Embedded::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => false ]],
-            [ 'class' => Mapping\OneToOne::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => true ]],
-            [ 'class' => Mapping\OneToMany::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => true ]],
-            [ 'class' => Mapping\ManyToOne::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => true ]],
-            [ 'class' => Mapping\ManyToMany::class, 'mappingInfo' => [ 'isMapped' => true, 'isJoin' => true ]],
+            [ 'class' => Mapping\Column::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => false ]],
+            [ 'class' => Mapping\Embedded::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => false ]],
+            [ 'class' => Mapping\OneToOne::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => true ]],
+            [ 'class' => Mapping\OneToMany::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => false ]],
+            [ 'class' => Mapping\ManyToOne::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => true ]],
+            [ 'class' => Mapping\ManyToMany::class, 'mappingInfo' => [ 'isMapped' => true, 'isToOneJoin' => false ]],
 
-            [ 'class' => \stdClass::class, 'mappingInfo' => [ 'isMapped' => false, 'isJoin' => false ]],
+            [ 'class' => \stdClass::class, 'mappingInfo' => [ 'isMapped' => false, 'isToOneJoin' => false ]],
         ];
     }
 

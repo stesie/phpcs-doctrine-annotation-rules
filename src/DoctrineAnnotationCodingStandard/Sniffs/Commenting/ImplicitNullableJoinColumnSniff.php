@@ -19,7 +19,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
      */
     protected function sniffDocblock(File $phpcsFile, int $stackPtr, array $annotations)
     {
-        if (!DoctrineMappingHelper::isDoctrineJoin($annotations)) {
+        if (!DoctrineMappingHelper::isDoctrineToOneJoin($annotations)) {
             return;
         }
 
