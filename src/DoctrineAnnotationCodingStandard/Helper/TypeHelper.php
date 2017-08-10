@@ -20,30 +20,30 @@ use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 
 class TypeHelper
 {
-    public static function fromString(string $varTagContent, ImportClassMap $classMap): Type
+    public static function fromString(string $varTagContent, string $namespace = null, ImportClassMap $classMap): Type
     {
         $parts = explode('|', $varTagContent);
 
         if (count($parts) === 1) {
             if (substr($varTagContent, -2) === '[]') {
-                return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $classMap));
+                return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $namespace, $classMap));
             }
 
-            return self::convertPrimitiveType($varTagContent, $classMap);
+            return self::convertPrimitiveType($varTagContent, $namespace, $classMap);
         }
 
         if (in_array('null', $parts)) {
             $parts = array_filter($parts, function (string $value) {
                 return $value !== 'null';
             });
-            return new NullableType(self::fromString(implode('|', $parts), $classMap));
+            return new NullableType(self::fromString(implode('|', $parts), $namespace, $classMap));
         }
 
         if (in_array('array', $parts)) {
             $parts = array_filter($parts, function (string $value) {
                 return $value !== 'array';
             });
-            $itemType = self::fromString(implode('|', $parts), $classMap);
+            $itemType = self::fromString(implode('|', $parts), $namespace, $classMap);
 
             if (!$itemType instanceof ArrayType) {
                 throw new ParseErrorException('itemtype of array not an array');
@@ -57,10 +57,11 @@ class TypeHelper
 
     /**
      * @param string $varTagContent
+     * @param string|null $namespace
      * @param ImportClassMap $classMap
      * @return Type
      */
-    private static function convertPrimitiveType(string $varTagContent, ImportClassMap $classMap): Type
+    private static function convertPrimitiveType(string $varTagContent, string $namespace = null, ImportClassMap $classMap): Type
     {
         switch ($varTagContent) {
             case 'int':
@@ -97,13 +98,6 @@ class TypeHelper
             return new ObjectType(substr($varTagContent, 1));
         }
 
-        $unqualifiedObject = new UnqualifiedObjectType($varTagContent);
-        $tempQualifiedObject = $unqualifiedObject->qualify(null, $classMap);
-
-        if ($tempQualifiedObject instanceof CollectionType) {
-            return $tempQualifiedObject;
-        }
-
-        return $unqualifiedObject;
+        return (new UnqualifiedObjectType($varTagContent))->qualify($namespace, $classMap);
     }
 }

@@ -28,7 +28,7 @@ class TypeHelperTest extends TestCase
      */
     public function testFromStringWithPlainTypes(string $typeString, Type $type)
     {
-        $this->assertEquals($type, TypeHelper::fromString($typeString, new ImportClassMap()));
+        $this->assertEquals($type, TypeHelper::fromString($typeString, null, new ImportClassMap()));
     }
 
     public function plainTypesProvider(): array
@@ -49,27 +49,27 @@ class TypeHelperTest extends TestCase
 
     public function testFromStringImplicityArrayType()
     {
-        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('int[]', new ImportClassMap()));
+        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('int[]', null, new ImportClassMap()));
     }
 
     public function testFromStringExplicitArrayType()
     {
-        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('array|int[]', new ImportClassMap()));
+        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('array|int[]', null, new ImportClassMap()));
     }
 
     public function testFromStringWithNullablePlainType()
     {
-        $this->assertEquals(new NullableType(new IntegerType()), TypeHelper::fromString('null|int', new ImportClassMap()));
+        $this->assertEquals(new NullableType(new IntegerType()), TypeHelper::fromString('null|int', null, new ImportClassMap()));
     }
 
     public function testFromStringWithMultipleNull()
     {
-        $this->assertEquals(new NullableType(new BooleanType()), TypeHelper::fromString('null|boolean|null', new ImportClassMap()));
+        $this->assertEquals(new NullableType(new BooleanType()), TypeHelper::fromString('null|boolean|null', null, new ImportClassMap()));
     }
 
     public function testFromStringWithUntypedCollection()
     {
-        $type = TypeHelper::fromString('\\Doctrine\\Common\\Collections\\Collection', new ImportClassMap());
+        $type = TypeHelper::fromString('\\Doctrine\\Common\\Collections\\Collection', null, new ImportClassMap());
         $this->assertEquals(new CollectionType(new MixedType()), $type);
     }
 
@@ -78,17 +78,17 @@ class TypeHelperTest extends TestCase
         $classMap = new ImportClassMap();
         $classMap->add('Collection', 'Doctrine\\Common\\Collections\\Collection');
 
-        $type = TypeHelper::fromString('Collection', $classMap);
+        $type = TypeHelper::fromString('Collection', null, $classMap);
         $this->assertEquals(new CollectionType(new MixedType()), $type);
     }
 
     public function testFromStringWithFqcn()
     {
-        $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime', new ImportClassMap()));
+        $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime', null, new ImportClassMap()));
     }
 
     public function testFromStringWithUnqualifiedClassname()
     {
-        $this->assertEquals(new UnqualifiedObjectType('Foo'), TypeHelper::fromString('Foo', new ImportClassMap()));
+        $this->assertEquals(new ObjectType('Foo'), TypeHelper::fromString('Foo', null, new ImportClassMap()));
     }
 }
