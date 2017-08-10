@@ -3,6 +3,7 @@
 namespace DoctrineAnnotationCodingStandard\Helper;
 
 use DoctrineAnnotationCodingStandard\Exception\ParseErrorException;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\BooleanType;
@@ -19,7 +20,7 @@ use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 
 class TypeHelper
 {
-    public static function fromString(string $varTagContent): Type
+    public static function fromString(string $varTagContent, ImportClassMap $classMap): Type
     {
         $parts = explode('|', $varTagContent);
 
@@ -35,14 +36,14 @@ class TypeHelper
             $parts = array_filter($parts, function (string $value) {
                 return $value !== 'null';
             });
-            return new NullableType(self::fromString(implode('|', $parts)));
+            return new NullableType(self::fromString(implode('|', $parts), $classMap));
         }
 
         if (in_array('array', $parts)) {
             $parts = array_filter($parts, function (string $value) {
                 return $value !== 'array';
             });
-            $itemType = self::fromString(implode('|', $parts));
+            $itemType = self::fromString(implode('|', $parts), $classMap);
 
             if (!$itemType instanceof ArrayType) {
                 throw new ParseErrorException('itemtype of array not an array');

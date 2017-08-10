@@ -3,6 +3,7 @@
 namespace DoctrineAnnotationCodingStandardTests\Helper;
 
 use DoctrineAnnotationCodingStandard\Helper\TypeHelper;
+use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\BooleanType;
@@ -27,7 +28,7 @@ class TypeHelperTest extends TestCase
      */
     public function testFromStringWithPlainTypes(string $typeString, Type $type)
     {
-        $this->assertEquals($type, TypeHelper::fromString($typeString));
+        $this->assertEquals($type, TypeHelper::fromString($typeString, new ImportClassMap()));
     }
 
     public function plainTypesProvider(): array
@@ -48,37 +49,37 @@ class TypeHelperTest extends TestCase
 
     public function testFromStringImplicityArrayType()
     {
-        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('int[]'));
+        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('int[]', new ImportClassMap()));
     }
 
     public function testFromStringExplicitArrayType()
     {
-        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('array|int[]'));
+        $this->assertEquals(new ArrayType(new IntegerType()), TypeHelper::fromString('array|int[]', new ImportClassMap()));
     }
 
     public function testFromStringWithNullablePlainType()
     {
-        $this->assertEquals(new NullableType(new IntegerType()), TypeHelper::fromString('null|int'));
+        $this->assertEquals(new NullableType(new IntegerType()), TypeHelper::fromString('null|int', new ImportClassMap()));
     }
 
     public function testFromStringWithMultipleNull()
     {
-        $this->assertEquals(new NullableType(new BooleanType()), TypeHelper::fromString('null|boolean|null'));
+        $this->assertEquals(new NullableType(new BooleanType()), TypeHelper::fromString('null|boolean|null', new ImportClassMap()));
     }
 
     public function testFromStringWithUntypedCollection()
     {
-        $type = TypeHelper::fromString('\\Doctrine\\Common\\Collections\\Collection');
+        $type = TypeHelper::fromString('\\Doctrine\\Common\\Collections\\Collection', new ImportClassMap());
         $this->assertEquals(new CollectionType(new MixedType()), $type);
     }
 
     public function testFromStringWithFqcn()
     {
-        $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime'));
+        $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime', new ImportClassMap()));
     }
 
     public function testFromStringWithUnqualifiedClassname()
     {
-        $this->assertEquals(new UnqualifiedObjectType('Foo'), TypeHelper::fromString('Foo'));
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), TypeHelper::fromString('Foo', new ImportClassMap()));
     }
 }
