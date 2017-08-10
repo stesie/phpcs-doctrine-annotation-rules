@@ -136,7 +136,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         }
 
         if ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
-            throw new ParseErrorException('Parse error after T_USE, T_SEMICOLON expected');
+            throw new ParseErrorException('Parse error after T_NAMESPACE, T_SEMICOLON expected');
         }
 
         if (empty($namespace)) {
@@ -196,7 +196,9 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         }
 
         if ($tokens[$stackPtr]['type'] !== 'T_SEMICOLON') {
-            throw new ParseErrorException('Parse error after T_USE, T_SEMICOLON expected');
+            throw new ParseErrorException(
+                \sprintf('Parse error on line %d: after T_USE, T_SEMICOLON expected', $tokens[$stackPtr]['line'])
+            );
         }
 
         $this->imports->add($alias, $use);
