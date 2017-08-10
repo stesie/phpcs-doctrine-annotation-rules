@@ -51,7 +51,7 @@ class TypeHelper
             return $itemType;
         }
 
-        throw new ParseErrorException('type string not understood');
+        throw new ParseErrorException('type string not understood: ' . $varTagContent);
     }
 
     /**
