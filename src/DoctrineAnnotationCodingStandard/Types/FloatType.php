@@ -15,4 +15,13 @@ class FloatType implements Type
     {
         return 'float';
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self;
+    }
 }

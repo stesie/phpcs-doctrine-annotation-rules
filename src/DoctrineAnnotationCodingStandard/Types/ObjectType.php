@@ -37,4 +37,14 @@ class ObjectType implements Type
             return '\\' . $this->fqcn;
         }
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self &&
+            $this->fqcn === $other->fqcn;
+    }
 }

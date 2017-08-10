@@ -23,4 +23,10 @@ class VarTagTest extends TestCase
             'Expected @var type of "int", got "string"'
         );
     }
+
+    public function testCorrectVarTagOnORMColumn()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/VarTagCorrect.inc', VarTagSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
 }

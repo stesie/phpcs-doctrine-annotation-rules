@@ -15,4 +15,13 @@ class IntegerType implements Type
     {
         return 'int';
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self;
+    }
 }

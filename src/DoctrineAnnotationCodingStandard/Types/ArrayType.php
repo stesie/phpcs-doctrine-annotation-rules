@@ -27,4 +27,14 @@ class ArrayType implements Type, QualifyableObjectType
     {
         return \sprintf('%s[]', $this->itemType->toString($namespace, $imports));
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self &&
+            $this->itemType->isEqual($other->itemType);
+    }
 }

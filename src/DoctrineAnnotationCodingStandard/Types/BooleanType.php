@@ -15,4 +15,13 @@ class BooleanType implements Type
     {
         return 'bool';
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self;
+    }
 }

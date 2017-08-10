@@ -32,4 +32,15 @@ class CollectionType extends ObjectType implements QualifyableObjectType
 
         return \sprintf('%s[]|%s', $this->itemType->toString($namespace, $imports), $collectionClass);
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self &&
+            parent::isEqual($other) &&
+            $this->itemType->isEqual($other->itemType);
+    }
 }

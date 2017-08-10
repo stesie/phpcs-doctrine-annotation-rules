@@ -12,4 +12,10 @@ interface Type
      * @return string
      */
     public function toString(string $namespace = null, ImportClassMap $imports): string;
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool;
 }

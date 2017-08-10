@@ -51,4 +51,14 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
     {
         return $this->className;
     }
+
+    /**
+     * @param Type $other
+     * @return bool
+     */
+    public function isEqual(Type $other): bool
+    {
+        return $other instanceof self &&
+            $this->className === $other->className;
+    }
 }
