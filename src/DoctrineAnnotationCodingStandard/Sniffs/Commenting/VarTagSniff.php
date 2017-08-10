@@ -35,7 +35,7 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
         }
 
         $expectedType = $this->qualify(DoctrineMappingHelper::getMappedType($annotations));
-        $actualType = TypeHelper::fromString($varTagContent, null, $this->getImports());
+        $actualType = TypeHelper::fromString($varTagContent, $this->getNamespace(), $this->getImports());
 
         if (!$expectedType->isEqual($actualType)) {
             $error = \sprintf(
