@@ -30,6 +30,12 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertSame(['testling' => 'Foo\\Bar\\Baz'], $this->getSniff()->getImports()->toArray());
     }
 
+    public function testIgnoreNonDoctrineAnnotations()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/IgnoreNonDoctrineAnnotations.inc', DummySniff::class);
+        $this->assertNoSniffErrors($file);
+    }
+
     /**
      * @dataProvider invalidNamespaceStatementProvider
      * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
