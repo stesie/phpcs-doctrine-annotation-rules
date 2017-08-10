@@ -25,10 +25,6 @@ class TypeHelper
         $parts = explode('|', $varTagContent);
 
         if (count($parts) === 1) {
-            if (substr($varTagContent, -2) === '[]') {
-                return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $namespace, $classMap));
-            }
-
             return self::convertPrimitiveType($varTagContent, $namespace, $classMap);
         }
 
@@ -52,6 +48,25 @@ class TypeHelper
             return $itemType;
         }
 
+        $isCollection = false;
+        $itemType = null;
+
+        foreach ($parts as $part) {
+            $part = self::convertPrimitiveType($part, $namespace, $classMap);
+
+            if ($part instanceof CollectionType) {
+                $isCollection = true;
+            } elseif ($itemType === null && $part instanceof ArrayType) {
+                $itemType = $part;
+            } else {
+                throw new ParseErrorException('type string not understood: ' . $varTagContent);
+            }
+        }
+
+        if ($isCollection && $itemType instanceof ArrayType) {
+            return new CollectionType($itemType->getItemType());
+        }
+
         throw new ParseErrorException('type string not understood: ' . $varTagContent);
     }
 
@@ -63,6 +78,10 @@ class TypeHelper
      */
     private static function convertPrimitiveType(string $varTagContent, string $namespace = null, ImportClassMap $classMap): Type
     {
+        if (substr($varTagContent, -2) === '[]') {
+            return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $namespace, $classMap));
+        }
+
         switch ($varTagContent) {
             case 'int':
             case 'integer':
