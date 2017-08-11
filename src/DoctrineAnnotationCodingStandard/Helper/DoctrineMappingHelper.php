@@ -4,6 +4,7 @@ namespace DoctrineAnnotationCodingStandard\Helper;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping;
+use Doctrine\ORM\Mapping\JoinColumn;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\BooleanType;
@@ -11,6 +12,7 @@ use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\FloatType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
+use DoctrineAnnotationCodingStandard\Types\NullableType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\ResourceType;
 use DoctrineAnnotationCodingStandard\Types\StringType;
@@ -123,7 +125,16 @@ class DoctrineMappingHelper
 
             case Mapping\OneToOne::class:
             case Mapping\ManyToOne::class:
-                return new UnqualifiedObjectType($mappingAnnotation->targetEntity);
+                $objectType = new UnqualifiedObjectType($mappingAnnotation->targetEntity);
+
+                /** @var JoinColumn|null $joinColumn */
+                $joinColumn = DocBlockHelper::findAnnotationByClass(JoinColumn::class, $annotations);
+
+                if ($joinColumn === null || $joinColumn->nullable) {
+                    return new NullableType($objectType);
+                }
+
+                return $objectType;
 
             case Mapping\OneToMany::class:
             case Mapping\ManyToMany::class:

@@ -11,6 +11,7 @@ use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\FloatType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
+use DoctrineAnnotationCodingStandard\Types\NullableType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\ResourceType;
 use DoctrineAnnotationCodingStandard\Types\StringType;
@@ -128,18 +129,34 @@ class DoctrineMappingHelperTest extends TestCase
 
     public function testGetTypeFromAnnotationMappedOneToOne()
     {
-        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToOne(targetEntity="Foo") */', DummySniff::class);
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToOne(targetEntity="Foo") @ORM\JoinColumn(nullable=false) */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
         $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
     }
 
+    public function testGetTypeFromAnnotationMappedOneToOneNullable()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\OneToOne(targetEntity="Foo") */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertEquals(new NullableType(new UnqualifiedObjectType('Foo')), DoctrineMappingHelper::getMappedType($annotations));
+    }
+
     public function testGetTypeFromAnnotationMappedManyToOne()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToOne(targetEntity="Foo") @ORM\JoinColumn(nullable=false) */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
+    }
+
+    public function testGetTypeFromAnnotationMappedManyToOneNullable()
     {
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\ManyToOne(targetEntity="Foo") */', DummySniff::class);
         $annotations = $this->getSniff()->getAnnotations();
 
-        $this->assertEquals(new UnqualifiedObjectType('Foo'), DoctrineMappingHelper::getMappedType($annotations));
+        $this->assertEquals(new NullableType(new UnqualifiedObjectType('Foo')), DoctrineMappingHelper::getMappedType($annotations));
     }
 
     public function testGetTypeFromAnnotationMappedOneToMany()
