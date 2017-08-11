@@ -119,6 +119,14 @@ class DoctrineMappingHelperTest extends TestCase
         $this->assertEquals(new ObjectType(\DateTime::class), DoctrineMappingHelper::getMappedType($annotations));
     }
 
+    public function testGetTypeFromAnnotationMappedNullableColumn()
+    {
+        $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Column(type="date", nullable=true) */', DummySniff::class);
+        $annotations = $this->getSniff()->getAnnotations();
+
+        $this->assertEquals(new NullableType(new ObjectType(\DateTime::class)), DoctrineMappingHelper::getMappedType($annotations));
+    }
+
     public function testGetTypeFromAnnotationMappedEmbedded()
     {
         $this->checkString('use Doctrine\ORM\Mapping as ORM; /** @ORM\Embedded(class="Foo") */', DummySniff::class);

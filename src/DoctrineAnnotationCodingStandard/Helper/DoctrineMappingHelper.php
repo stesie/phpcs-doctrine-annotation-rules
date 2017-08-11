@@ -118,7 +118,11 @@ class DoctrineMappingHelper
 
         switch (get_class($mappingAnnotation)) {
             case Mapping\Column::class:
-                return self::getTypeFromDoctrineType($mappingAnnotation->type);
+                if ($mappingAnnotation->nullable) {
+                    return new NullableType(self::getTypeFromDoctrineType($mappingAnnotation->type));
+                } else {
+                    return self::getTypeFromDoctrineType($mappingAnnotation->type);
+                }
 
             case Mapping\Embedded::class:
                 return new UnqualifiedObjectType($mappingAnnotation->class);
