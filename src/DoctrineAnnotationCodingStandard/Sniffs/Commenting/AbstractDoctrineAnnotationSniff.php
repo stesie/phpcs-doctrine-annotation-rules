@@ -24,6 +24,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     private $namespace;
 
     /**
+     * @var File|null
+     */
+    private $lastSeenFile;
+
+    /**
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $annotations
@@ -32,7 +37,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
 
     public function __construct()
     {
-        $this->imports = new ImportClassMap();
+        $this->resetState();
     }
 
     /**
@@ -58,10 +63,16 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
+        if ($phpcsFile !== $this->lastSeenFile) {
+            $this->resetState();
+            $this->lastSeenFile = $phpcsFile;
+        }
+
         $tokens = $phpcsFile->getTokens();
 
         switch ($tokens[$stackPtr]['type']) {
             case 'T_NAMESPACE':
+                $this->resetState();
                 $this->processNamespace($phpcsFile, $stackPtr);
                 break;
 
@@ -242,5 +253,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $annotations = $this->parseDocblockWithDoctrine($phpcsFile, $stackPtr);
         $this->sniffDocblock($phpcsFile, $stackPtr, $annotations);
+    }
+
+    private function resetState()
+    {
+        $this->imports = new ImportClassMap();
+        $this->namespace = null;
     }
 }
