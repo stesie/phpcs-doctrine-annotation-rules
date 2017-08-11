@@ -34,22 +34,16 @@ class DocBlockHelperTest extends TestCase
         $this->assertSame('foo', DocBlockHelper::getVarTagContent($file, 1));
     }
 
-    /**
-     * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
-     */
     public function testGetVarTagNoContent()
     {
         $file = $this->checkString('/** @var*/', DummySniff::class);
-        DocBlockHelper::getVarTagContent($file, 1);
+        $this->assertSame('', DocBlockHelper::getVarTagContent($file, 1));
     }
 
-    /**
-     * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
-     */
     public function testGetVarTagWithJustSpaces()
     {
         $file = $this->checkString('/** @var   */', DummySniff::class);
-        DocBlockHelper::getVarTagContent($file, 1);
+        $this->assertSame('', DocBlockHelper::getVarTagContent($file, 1));
     }
 
     /**
@@ -94,6 +88,17 @@ class DocBlockHelperTest extends TestCase
 
         $tag = DocBlockHelper::findTagByClass($file, 1, $classMap, ORM\JoinColumn::class);
         $this->assertSame('()', $tag);
+    }
+
+    public function testFindTagByClassWithSpacesWithinContent()
+    {
+        $file = $this->checkString('/** @ORM\JoinColumn(onDelete="CASCADE", nullable=true) */', DummySniff::class);
+
+        $classMap = new ImportClassMap();
+        $classMap->add('ORM', 'Doctrine\\ORM\\Mapping');
+
+        $tag = DocBlockHelper::findTagByClass($file, 1, $classMap, ORM\JoinColumn::class);
+        $this->assertSame('(onDelete="CASCADE", nullable=true)', $tag);
     }
 
     public function testFindTagMissing()

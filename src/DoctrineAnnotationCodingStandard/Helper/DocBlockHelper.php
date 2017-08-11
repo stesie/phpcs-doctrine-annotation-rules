@@ -97,19 +97,13 @@ class DocBlockHelper
         $tagName = substr($tokens[$tagPos]['content'], 1);
 
         $parenPos = strpos($tagName, '(');
-        if ($parenPos !== false) {
-            return substr($tagName, $parenPos);
+        $content = ($parenPos !== false) ? substr($tagName, $parenPos) : '';
+
+        while (in_array($tokens[++$tagPos]['type'], ['T_DOC_COMMENT_WHITESPACE', 'T_DOC_COMMENT_STRING'])) {
+            $content .= $tokens[$tagPos]['content'];
         }
 
-        if ($tokens[$tagPos + 1]['type'] !== 'T_DOC_COMMENT_WHITESPACE') {
-            throw new ParseErrorException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
-        }
-
-        if ($tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
-            throw new ParseErrorException('T_DOC_COMMENT_STRING expected after @tag');
-        }
-
-        return trim($tokens[$tagPos + 2]['content']);
+        return trim($content);
     }
 
     /**
