@@ -33,6 +33,8 @@ class ObjectType implements Type
             return $alias;
         } elseif ($namespace === null) {
             return $this->fqcn;
+        } elseif (strpos($this->fqcn, $namespace) === 0) {
+            return substr($this->fqcn, strlen($namespace) + 1);
         } else {
             return '\\' . $this->fqcn;
         }

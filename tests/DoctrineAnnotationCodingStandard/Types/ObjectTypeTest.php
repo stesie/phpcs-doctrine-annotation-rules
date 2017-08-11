@@ -35,6 +35,15 @@ class ObjectTypeTest extends TestCase
         );
     }
 
+    public function testToStringWithinSameNamespace()
+    {
+        $type = new ObjectType('Foo\\Bar\\Baz');
+        $this->assertSame(
+            'Baz',
+            $type->toString('Foo\\Bar', new ImportClassMap())
+        );
+    }
+
     public function testToStringWithAlias()
     {
         $type = new ObjectType(\DateTime::class);
