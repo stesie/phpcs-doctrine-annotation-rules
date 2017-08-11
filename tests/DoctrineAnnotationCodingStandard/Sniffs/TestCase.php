@@ -62,7 +62,8 @@ abstract class TestCase extends BaseTestCase
         return $file;
     }
 
-    protected function assertFixedEqualsFile(string $expectedFile, File $file) {
+    protected function assertFixedEqualsFile(string $expectedFile, File $file)
+    {
         $file->fixer->fixFile();
         $this->assertStringEqualsFile($expectedFile, $file->fixer->getContents());
     }
