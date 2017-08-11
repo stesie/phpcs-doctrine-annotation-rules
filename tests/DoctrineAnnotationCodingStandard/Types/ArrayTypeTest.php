@@ -5,6 +5,7 @@ namespace DoctrineAnnotationCodingStandardTests\Types;
 use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\ArrayType;
 use DoctrineAnnotationCodingStandard\Types\IntegerType;
+use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
 use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use PHPUnit\Framework\TestCase;
@@ -26,5 +27,10 @@ class ArrayTypeTest extends TestCase
     public function testToString()
     {
         $this->assertSame('int[]', (new ArrayType(new IntegerType()))->toString(null, new ImportClassMap()));
+    }
+
+    public function testToStringOnMixedArrayYieldsJustArray()
+    {
+        $this->assertSame('array', (new ArrayType(new MixedType()))->toString(null, new ImportClassMap()));
     }
 }

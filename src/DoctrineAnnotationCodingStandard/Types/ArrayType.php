@@ -33,7 +33,11 @@ class ArrayType implements Type, QualifyableObjectType
      */
     public function toString(string $namespace = null, ImportClassMap $imports): string
     {
-        return \sprintf('%s[]', $this->itemType->toString($namespace, $imports));
+        if ($this->itemType instanceof MixedType) {
+            return 'array';
+        } else {
+            return \sprintf('%s[]', $this->itemType->toString($namespace, $imports));
+        }
     }
 
     /**
