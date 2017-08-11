@@ -22,7 +22,7 @@ class TypeHelper
 {
     public static function fromString(string $varTagContent, string $namespace = null, ImportClassMap $classMap): Type
     {
-        $parts = explode('|', $varTagContent);
+        $parts = explode('|', str_replace(' ', '', $varTagContent));
 
         if (count($parts) === 1) {
             return self::convertPrimitiveType($varTagContent, $namespace, $classMap);

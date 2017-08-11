@@ -91,6 +91,16 @@ class TypeHelperTest extends TestCase
         $this->assertEquals(new CollectionType(new ObjectType('AppBundle\\Entity\\Customer')), $type);
     }
 
+    public function testFromStringWithTypedCollectionWithSpaces()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('Collection', 'Doctrine\\Common\\Collections\\Collection');
+        $classMap->add('Customer', 'AppBundle\\Entity\\Customer');
+
+        $type = TypeHelper::fromString('Collection | Customer[]', null, $classMap);
+        $this->assertEquals(new CollectionType(new ObjectType('AppBundle\\Entity\\Customer')), $type);
+    }
+
     public function testFromStringWithFqcn()
     {
         $this->assertEquals(new ObjectType(\DateTime::class), TypeHelper::fromString('\\DateTime', null, new ImportClassMap()));
