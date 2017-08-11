@@ -20,11 +20,16 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
     /**
      * @param string|null $namespace
      * @param ImportClassMap $imports
+     * @param string $mode
      * @return Type
      */
-    public function qualify(string $namespace = null, ImportClassMap $imports): Type
+    public function qualify(string $namespace = null, ImportClassMap $imports, string $mode = self::MODE_PHP_STANDARD): Type
     {
         $parts = explode('\\', $this->className);
+
+        if ($mode === self::MODE_DOCTRINE_ANNOTATION_STYLE && count($parts) > 1) {
+            return new ObjectType($this->className);
+        }
 
         if ($parts[0] === '') {
             $fqcn = $this->className;

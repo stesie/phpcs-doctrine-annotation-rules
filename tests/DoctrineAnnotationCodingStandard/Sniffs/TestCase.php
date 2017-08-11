@@ -105,7 +105,7 @@ abstract class TestCase extends BaseTestCase
     protected function assertNoSniffErrors(File $codeSnifferFile)
     {
         $errors = $codeSnifferFile->getErrors();
-        $this->assertEmpty($errors, 'Expected no errors');
+        $this->assertEmpty($errors, 'Expected no Sniff errors');
     }
 
     protected function assertNoSniffErrorOnLine(File $codeSnifferFile, int $line)

@@ -47,4 +47,10 @@ class VarTagTest extends TestCase
         $file = $this->checkFile(__DIR__ . '/data/VarTagEnumTypeColumn.inc', VarTagSniff::class, ['doctrineExtraTypes' => ['CustomerType']]);
         $this->assertNoSniffErrors($file);
     }
+
+    public function testCorrectVarTagWithFQCN()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/VarTagWithFQCN.inc', VarTagSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
 }

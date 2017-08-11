@@ -34,7 +34,10 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
         $closerTokenPtr = $tokens[$stackPtr]['comment_closer'];
 
         $varTagContent = DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr);
-        $expectedType = $this->qualify(DoctrineMappingHelper::getMappedType($annotations, $this->doctrineExtraTypes));
+        $expectedType = $this->qualify(
+            DoctrineMappingHelper::getMappedType($annotations, $this->doctrineExtraTypes),
+            QualifyableObjectType::MODE_DOCTRINE_ANNOTATION_STYLE
+        );
 
         if ($varTagContent === null) {
             $error = 'There must be a @var tag on Doctrine mapped properties';
@@ -90,14 +93,15 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
 
     /**
      * @param Type $type
+     * @param string $mode
      * @return Type
      */
-    private function qualify(Type $type): Type
+    private function qualify(Type $type, string $mode): Type
     {
         if (!$type instanceof QualifyableObjectType) {
             return $type;
         }
 
-        return $type->qualify($this->getNamespace(), $this->getImports());
+        return $type->qualify($this->getNamespace(), $this->getImports(), $mode);
     }
 }

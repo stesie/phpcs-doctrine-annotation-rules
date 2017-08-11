@@ -6,6 +6,7 @@ use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\CollectionType;
 use DoctrineAnnotationCodingStandard\Types\MixedType;
 use DoctrineAnnotationCodingStandard\Types\ObjectType;
+use DoctrineAnnotationCodingStandard\Types\QualifyableObjectType;
 use DoctrineAnnotationCodingStandard\Types\UnqualifiedObjectType;
 use PHPUnit\Framework\TestCase;
 
@@ -53,6 +54,13 @@ class UnqualifiedObjectTypeTest extends TestCase
     public function testQualificationOfAlreadyQualifiedClassname()
     {
         $result = (new UnqualifiedObjectType('\\AppBundle\\Entity\\Customer'))->qualify('\\AppBundle\\Entity', new ImportClassMap());
+        $this->assertEquals(new ObjectType('\\AppBundle\\Entity\\Customer'), $result);
+    }
+
+    public function testDoctrineStyleQualificationOfAlreadyQualifiedClassname()
+    {
+        $result = (new UnqualifiedObjectType('AppBundle\\Entity\\Customer'))
+            ->qualify('\\AppBundle\\Entity', new ImportClassMap(), QualifyableObjectType::MODE_DOCTRINE_ANNOTATION_STYLE);
         $this->assertEquals(new ObjectType('\\AppBundle\\Entity\\Customer'), $result);
     }
 }
