@@ -154,6 +154,11 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
+        if ($tokens[$stackPtr + 1]['type'] === 'T_OPEN_PARENTHESIS') {
+            // ignore "function use(...)"
+            return;
+        }
+
         if ($tokens[$stackPtr + 1]['type'] !== 'T_WHITESPACE') {
             throw new ParseErrorException('Token after T_USE not T_WHITESPACE');
         }
@@ -162,7 +167,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
         $stackPtr += 2;
 
         if ($tokens[$stackPtr]['type'] === 'T_OPEN_PARENTHESIS') {
-            // ignore "function use"
+            // ignore "function use (...)"
             return;
         }
 

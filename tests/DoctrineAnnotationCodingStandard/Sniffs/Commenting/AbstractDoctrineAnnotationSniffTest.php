@@ -42,6 +42,12 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertNoSniffErrors($file);
     }
 
+    public function testIgnoreFunctionUseWithoutSpace()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/FunctionUseWithoutSpace.inc', DummySniff::class);
+        $this->assertNoSniffErrors($file);
+    }
+
     /**
      * @dataProvider invalidNamespaceStatementProvider
      * @expectedException \DoctrineAnnotationCodingStandard\Exception\ParseErrorException
@@ -89,7 +95,6 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
     {
         return [
             ['use <=>;'],
-            ['use()Foo;'],
             ['use Foo()Bar() As Bar;'],
             ['use Foo()As Bar;'],
             ['use Foo\Bar As()Bar;'],
