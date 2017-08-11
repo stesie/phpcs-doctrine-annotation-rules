@@ -26,7 +26,9 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
     {
         $parts = explode('\\', $this->className);
 
-        if ($imports->hasAlias($parts[0])) {
+        if ($parts[0] === '') {
+            $fqcn = $this->className;
+        } elseif ($imports->hasAlias($parts[0])) {
             $parts[0] = $imports->classByAlias($parts[0]);
             $fqcn = implode('\\', $parts);
         } elseif ($namespace === null) {

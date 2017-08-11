@@ -49,4 +49,10 @@ class UnqualifiedObjectTypeTest extends TestCase
         $result = (new UnqualifiedObjectType('Collection'))->qualify('Something', $classMap);
         $this->assertEquals(new CollectionType(new MixedType()), $result);
     }
+
+    public function testQualificationOfAlreadyQualifiedClassname()
+    {
+        $result = (new UnqualifiedObjectType('\\AppBundle\\Entity\\Customer'))->qualify('\\AppBundle\\Entity', new ImportClassMap());
+        $this->assertEquals(new ObjectType('\\AppBundle\\Entity\\Customer'), $result);
+    }
 }
