@@ -30,6 +30,12 @@ class VarTagTest extends TestCase
         );
     }
 
+    public function testWrongVarTagFix()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/VarTagWrong.inc', VarTagSniff::class);
+        $this->assertFixedEqualsFile(__DIR__ . '/data/VarTagWrong.fixed.inc', $file);
+    }
+
     public function testCorrectVarTagOnORMColumn()
     {
         $file = $this->checkFile(__DIR__ . '/data/VarTagCorrect.inc', VarTagSniff::class);

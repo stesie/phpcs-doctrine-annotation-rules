@@ -15,6 +15,22 @@ class DocBlockHelper
      */
     public static function getVarTagContent(File $phpcsFile, int $stackPtr)
     {
+        $varTagPos = self::getVarTagPosition($phpcsFile, $stackPtr);
+
+        if ($varTagPos === null) {
+            return null;
+        }
+
+        return self::fetchTagContent($phpcsFile->getTokens(), $varTagPos);
+    }
+
+    /**
+     * @param File $phpcsFile
+     * @param int $stackPtr
+     * @return int|null
+     */
+    public static function getVarTagPosition(File $phpcsFile, int $stackPtr)
+    {
         $tokens = $phpcsFile->getTokens();
 
         if (!isset($tokens[$stackPtr])) {
@@ -30,7 +46,7 @@ class DocBlockHelper
                 continue;
             }
 
-            return self::fetchTagContent($tokens, $tagPos);
+            return $tagPos;
         }
 
         return null;
@@ -147,5 +163,27 @@ class DocBlockHelper
         }
 
         return $tokens[$stackPtr - 1]['content'];
+    }
+
+    public static function replaceVarTagContent(File $phpcsFile, int $stackPtr, string $content)
+    {
+        $tokens = $phpcsFile->getTokens();
+        $tagPos = self::getVarTagPosition($phpcsFile, $stackPtr);
+
+        if ($tagPos === null) {
+            throw new \LogicException('@var tag missing');
+        }
+
+        if ($tokens[$tagPos + 1]['type'] !== 'T_DOC_COMMENT_WHITESPACE') {
+            throw new ParseErrorException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
+        }
+
+        if ($tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
+            throw new ParseErrorException('T_DOC_COMMENT_STRING expected after @tag');
+        }
+
+        $phpcsFile->fixer->beginChangeset();
+        $phpcsFile->fixer->replaceToken($tagPos + 2, $content);
+        $phpcsFile->fixer->endChangeset();
     }
 }

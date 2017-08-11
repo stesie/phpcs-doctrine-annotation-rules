@@ -25,13 +25,14 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
             return;
         }
 
+        $tokens = $phpcsFile->getTokens();
+        $closerTokenPtr = $tokens[$stackPtr]['comment_closer'];
+
         $varTagContent = DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr);
         $expectedType = $this->qualify(DoctrineMappingHelper::getMappedType($annotations));
 
         if ($varTagContent === null) {
             $error = 'There must be a @var tag on Doctrine mapped properties';
-            $tokens = $phpcsFile->getTokens();
-            $closerTokenPtr = $tokens[$stackPtr]['comment_closer'];
 
             if ($tokens[$stackPtr]['line'] === $tokens[$closerTokenPtr]['line']) {
                 $phpcsFile->addError($error, $stackPtr, self::CODE_NO_VAR_TAG);
@@ -64,7 +65,20 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
                 $expectedType->toString($this->getNamespace(), $this->getImports()),
                 $actualType->toString($this->getNamespace(), $this->getImports())
             );
-            $phpcsFile->addError($error, $stackPtr, self::CODE_WRONG_VAR_TAG);
+
+            if ($tokens[$stackPtr]['line'] === $tokens[$closerTokenPtr]['line']) {
+                $phpcsFile->addError($error, $stackPtr, self::CODE_WRONG_VAR_TAG);
+                $fix = false;
+            } else {
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, self::CODE_WRONG_VAR_TAG);
+            }
+
+            if ($fix) {
+                DocBlockHelper::replaceVarTagContent(
+                    $phpcsFile, $stackPtr,
+                    $expectedType->toString($this->getNamespace(), $this->getImports())
+                );
+            }
         }
     }
 
