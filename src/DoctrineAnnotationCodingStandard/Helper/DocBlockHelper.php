@@ -129,4 +129,23 @@ class DocBlockHelper
 
         return null;
     }
+
+    public static function getIndentationWhitespace(File $phpcsFile, int $stackPtr): string
+    {
+        $tokens = $phpcsFile->getTokens();
+
+        if ($tokens[$stackPtr]['column'] === 1) {
+            return '';
+        }
+
+        if ($tokens[$stackPtr - 1]['code'] !== T_DOC_COMMENT_WHITESPACE) {
+            throw new ParseErrorException('Expected T_DOC_COMMENT_WHITESPACE as indentation');
+        }
+
+        if ($tokens[$stackPtr - 1]['column'] !== 1) {
+            throw new ParseErrorException('Non-whitespace before T_DOC_COMMENT_WHITESPACE');
+        }
+
+        return $tokens[$stackPtr - 1]['content'];
+    }
 }
