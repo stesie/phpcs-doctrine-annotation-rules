@@ -15,6 +15,11 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
     const CODE_WRONG_VAR_TAG = 'WrongVarTag';
 
     /**
+     * @var string[]
+     */
+    public $doctrineExtraTypes = [];
+
+    /**
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $annotations
@@ -29,7 +34,7 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
         $closerTokenPtr = $tokens[$stackPtr]['comment_closer'];
 
         $varTagContent = DocBlockHelper::getVarTagContent($phpcsFile, $stackPtr);
-        $expectedType = $this->qualify(DoctrineMappingHelper::getMappedType($annotations));
+        $expectedType = $this->qualify(DoctrineMappingHelper::getMappedType($annotations, $this->doctrineExtraTypes));
 
         if ($varTagContent === null) {
             $error = 'There must be a @var tag on Doctrine mapped properties';

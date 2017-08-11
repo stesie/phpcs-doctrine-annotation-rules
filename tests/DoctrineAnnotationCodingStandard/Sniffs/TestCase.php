@@ -33,10 +33,15 @@ abstract class TestCase extends BaseTestCase
     /**
      * @param string $filePath
      * @param string $sniff
+     * @param array $options
      * @return File
      */
-    protected function checkFile(string $filePath, string $sniff): File
+    protected function checkFile(string $filePath, string $sniff, array $options = []): File
     {
+        if (!empty($options)) {
+            $this->codeSniffer->ruleset->ruleset[$this->getSniffName()]['properties'] = $options;
+        }
+
         $this->codeSniffer->ruleset->sniffs = [$sniff => $sniff];
         $this->codeSniffer->ruleset->populateTokenListeners();
 

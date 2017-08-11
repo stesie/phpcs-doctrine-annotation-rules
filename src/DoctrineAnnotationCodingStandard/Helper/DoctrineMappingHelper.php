@@ -49,9 +49,10 @@ class DoctrineMappingHelper
 
     /**
      * @param string $doctrineType
+     * @param array $extraTypes
      * @return Type
      */
-    public static function getTypeFromDoctrineType(string $doctrineType): Type
+    public static function getTypeFromDoctrineType(string $doctrineType, array $extraTypes = []): Type
     {
         switch ($doctrineType) {
             case 'bigint':
@@ -100,15 +101,20 @@ class DoctrineMappingHelper
                 return new AnyObjectType();
         }
 
+        if (in_array($doctrineType, $extraTypes)) {
+            return new StringType();
+        }
+
         // Entity types just fall through
         return new UnqualifiedObjectType($doctrineType);
     }
 
     /**
      * @param array $annotations
+     * @param array $extraTypes
      * @return Type
      */
-    public static function getMappedType(array $annotations): Type
+    public static function getMappedType(array $annotations, array $extraTypes = []): Type
     {
         $mappingAnnotation = self::getPropertyMappingAnnotation($annotations);
 
@@ -119,9 +125,9 @@ class DoctrineMappingHelper
         switch (get_class($mappingAnnotation)) {
             case Mapping\Column::class:
                 if ($mappingAnnotation->nullable) {
-                    return new NullableType(self::getTypeFromDoctrineType($mappingAnnotation->type));
+                    return new NullableType(self::getTypeFromDoctrineType($mappingAnnotation->type, $extraTypes));
                 } else {
-                    return self::getTypeFromDoctrineType($mappingAnnotation->type);
+                    return self::getTypeFromDoctrineType($mappingAnnotation->type, $extraTypes);
                 }
 
             case Mapping\Embedded::class:
