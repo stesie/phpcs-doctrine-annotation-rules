@@ -75,7 +75,8 @@ class VarTagSniff extends AbstractDoctrineAnnotationSniff
 
             if ($fix) {
                 DocBlockHelper::replaceVarTagContent(
-                    $phpcsFile, $stackPtr,
+                    $phpcsFile,
+                    $stackPtr,
                     $expectedType->toString($this->getNamespace(), $this->getImports())
                 );
             }
