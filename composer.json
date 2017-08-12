@@ -1,5 +1,6 @@
 {
     "name": "stesie/phpcs-doctrine-annotation-rules",
+    "description": "Additional PHP Code Sniffer sniffs focusing on annotations for Doctrine ORM.",
     "type": "library",
     "license": "MIT",
     "authors": [
