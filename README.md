@@ -7,13 +7,30 @@
 Doctrine Annotation Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) provides
 some additional sniffs centered on DocBlock annotations for [Doctrine ORM](github.com/doctrine/doctrine2/).
 
-*This is currently very much work in progress and not yet very useful*
+# Sniffs included in this standard
 
-Ideas for sniffs involve:
+:wrench: = [Automatic errors fixing](#fixing-errors-automatically)
 
-* make sure all JOIN mappings have a `@JoinColumn` annotation, that explicitly states `nullable`
-  (this is because the default value `true` is unexpected to many)
-* make sure `@var` annotation exists and is in sync with the ORM configuration
+### DoctrineAnnotationCodingStandard.Commenting.ImplicitNullableJoinColumn
+
+Applies to DocBlocks of properties that are mapped as either `@ORM\ManyToOne` or `@ORM\OneToOne`.
+
+* Checks for missing `@ORM\JoinColumn` annotation
+* If `@ORM\JoinColumn` exists, checks if `nullable` is implicitly assumed to be `true`
+
+The default value of `nullable` of `@ORM\JoinColumn` is `true` (as opposed to `@ORM\Column`),
+which many DEVs are unaware of and hence have NULL-able associations where they should not have ones.
+This sniff ensures that the nullable-choice is made explicitly.
+
+
+### DoctrineAnnotationCodingStandard.Commenting.VarTag :wrench:
+
+Applies to all DocBlocks of Doctrine-mapped properties.
+
+* Checks for missing `@var` tag
+* Checks the type stated by `@var` against actual type (according to Doctrine mapping)
+
+This sniff supports automatic fixing with `phpcbf`.
 
 # Installation
 
@@ -47,4 +64,14 @@ To check your code base for violations, run `PHP_CodeSniffer` from the command l
 
 ```
 vendor/bin/phpcs --standard=ruleset.xml --extensions=php -sp src tests
+```
+
+## Fixing errors automatically
+
+Sniffs in this standard marked by the :wrench: symbol support 
+[automatic fixing of coding standard violations](#fixing-errors-automatically).
+To fix your code automatically, run phpcbf insteand of phpcs:
+
+```
+vendor/bin/phpcbf --standard=ruleset.xml --extensions=php -sp src tests
 ```
