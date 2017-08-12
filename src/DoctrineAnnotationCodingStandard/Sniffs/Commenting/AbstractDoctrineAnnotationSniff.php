@@ -165,6 +165,10 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
+        if ($this->isTraitUse($phpcsFile, $stackPtr)) {
+            return;
+        }
+
         if ($tokens[$stackPtr + 1]['type'] === 'T_OPEN_PARENTHESIS') {
             // ignore "function use(...)"
             return;
@@ -259,5 +263,15 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $this->imports = new ImportClassMap();
         $this->namespace = null;
+    }
+
+    /**
+     * @param File $phpcsFile
+     * @param int $usePtr
+     * @return bool
+     */
+    private function isTraitUse(File $phpcsFile, int $usePtr): bool
+    {
+        return $phpcsFile->findPrevious([T_CLASS, T_ANON_CLASS, T_TRAIT, T_INTERFACE], $usePtr) !== false;
     }
 }
