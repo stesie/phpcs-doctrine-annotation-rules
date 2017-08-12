@@ -32,16 +32,26 @@ Applies to all DocBlocks of Doctrine-mapped properties.
 
 This sniff supports automatic fixing with `phpcbf`.
 
+Sniff provides the following settings:
+
+* `doctrineExtraTypes`: list of custom Doctrine types, that are mapped as strings (instead of objects)
+
+Can be configured via `ruleset.xml` like so:
+
+```xml
+    <rule ref="DoctrineAnnotationCodingStandard.Commenting.VarTag">
+        <properties>
+            <property name="doctrineExtraTypes" type="array" value="CustomerType,CompanySizeType" />
+        </properties>
+    </rule>
+```
+
 # Installation
 
 The recommended way to install Doctrine Annotation Coding Standard is [through Composer](http://getcomposer.org).
 
-```JSON
-{
-	"require-dev": {
-		"stesie/phpcs-doctrine-annotation-rules": "dev-master"
-	}
-}
+```console
+$ composer require --dev stesie/phpcs-doctrine-annotation-rules
 ```
 
 Keep in mind that this is not a full coding standard, it just augments existing ones with extra checks
