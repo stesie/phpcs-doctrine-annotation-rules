@@ -24,4 +24,16 @@ class ImplicitNullableJoinColumnSniffTest extends TestCase
         $file = $this->checkFile(__DIR__ . '/data/JoinImplicitNullable.inc', ImplicitNullableJoinColumnSniff::class);
         $this->assertSniffError($file, 9, ImplicitNullableJoinColumnSniff::CODE_NO_NULLABLE_PROPERTY);
     }
+
+    public function testExplicitNullable()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/JoinExplicitNullable.inc', ImplicitNullableJoinColumnSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
+
+    public function testExplicitNullableWithExtraWhitespace()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/JoinExplicitNullableWhitespace.inc', ImplicitNullableJoinColumnSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
 }

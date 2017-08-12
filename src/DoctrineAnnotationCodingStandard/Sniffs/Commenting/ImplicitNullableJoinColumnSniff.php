@@ -39,7 +39,7 @@ class ImplicitNullableJoinColumnSniff extends AbstractDoctrineAnnotationSniff
 
         $content = DocBlockHelper::findTagByClass($phpcsFile, $stackPtr, $this->getImports(), JoinColumn::class);
 
-        if (!preg_match('/nullable=true/', $content)) {
+        if (!preg_match('/nullable\s*=\s*true/', $content)) {
             $error = 'There must be an explicit nullable property on @JoinColumn tag';
             $phpcsFile->addError($error, $stackPtr, self::CODE_NO_NULLABLE_PROPERTY);
             return;
