@@ -38,10 +38,10 @@ class DoctrineMappingHelperTest extends TestCase
      * @param string $className
      * @param bool[] $mappingInfo
      */
-    public function testIsDoctrineJoin(string $className, array $mappingInfo)
+    public function testIsMappedDoctrineJoin(string $className, array $mappingInfo)
     {
         $annotation = new $className();
-        $this->assertSame($mappingInfo['isToOneJoin'], DoctrineMappingHelper::isDoctrineToOneJoin([$annotation]));
+        $this->assertSame($mappingInfo['isToOneJoin'], DoctrineMappingHelper::isMappedDoctrineToOneJoin([$annotation]));
     }
 
     /**
@@ -59,6 +59,14 @@ class DoctrineMappingHelperTest extends TestCase
 
             [ 'class' => \stdClass::class, 'mappingInfo' => [ 'isMapped' => false, 'isToOneJoin' => false ]],
         ];
+    }
+
+    public function testIsMappedDoctrineJoinOnInverseSide()
+    {
+        $annotation = new Mapping\OneToOne();
+        $annotation->mappedBy = 'someFiled';
+
+        $this->assertFalse(DoctrineMappingHelper::isMappedDoctrineToOneJoin([$annotation]));
     }
 
     /**

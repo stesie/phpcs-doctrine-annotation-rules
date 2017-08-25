@@ -36,4 +36,10 @@ class ImplicitNullableJoinColumnSniffTest extends TestCase
         $file = $this->checkFile(__DIR__ . '/data/JoinExplicitNullableWhitespace.inc', ImplicitNullableJoinColumnSniff::class);
         $this->assertNoSniffErrors($file);
     }
+
+    public function testNoJoinColumnOnOneToOneInverseSide()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/JoinNoJoinColumnOnOneToOneInverseSide.inc', ImplicitNullableJoinColumnSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
 }

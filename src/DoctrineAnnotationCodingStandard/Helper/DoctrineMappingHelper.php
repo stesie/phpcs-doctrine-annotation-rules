@@ -34,13 +34,15 @@ class DoctrineMappingHelper
      * @param array $annotations
      * @return bool
      */
-    public static function isDoctrineToOneJoin(array $annotations): bool
+    public static function isMappedDoctrineToOneJoin(array $annotations): bool
     {
         foreach ($annotations as $doctrineTag) {
-            switch (get_class($doctrineTag)) {
-                case Mapping\OneToOne::class:
-                case Mapping\ManyToOne::class:
-                    return true;
+            if ($doctrineTag instanceof Mapping\OneToOne) {
+                return $doctrineTag->mappedBy === '' || $doctrineTag->mappedBy === null;
+            }
+
+            if ($doctrineTag instanceof Mapping\ManyToOne) {
+                return true;
             }
         }
 
