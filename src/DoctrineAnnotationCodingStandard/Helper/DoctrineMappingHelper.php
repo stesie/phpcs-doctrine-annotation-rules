@@ -139,6 +139,12 @@ class DoctrineMappingHelper
             case Mapping\ManyToOne::class:
                 $objectType = new UnqualifiedObjectType($mappingAnnotation->targetEntity);
 
+                if ($mappingAnnotation instanceof Mapping\OneToOne &&
+                    ($mappingAnnotation->mappedBy !== null && $mappingAnnotation->mappedBy !== '')
+                ) {
+                    return $objectType;
+                }
+
                 /** @var JoinColumn|null $joinColumn */
                 $joinColumn = DocBlockHelper::findAnnotationByClass(JoinColumn::class, $annotations);
 

@@ -8,6 +8,7 @@ class JoinNoJoinColumnOnOneToOneInverseSide
 {
     /**
      * @ORM\OneToOne(targetEntity="Address", mappedBy="whatever")
+     * @var Address
      */
     private $foo;
 }
