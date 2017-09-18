@@ -36,12 +36,6 @@ class AbstractDoctrineAnnotationSniffTest extends TestCase
         $this->assertEmpty($this->getSniff()->getImports()->toArray(), 'Trait "use" parsed as "import"');
     }
 
-    public function testIgnoreNonDoctrineAnnotations()
-    {
-        $file = $this->checkFile(__DIR__ . '/data/IgnoreNonDoctrineAnnotations.inc', DummySniff::class);
-        $this->assertNoSniffErrors($file);
-    }
-
     public function testIgnoreFunctionUse()
     {
         $file = $this->checkFile(__DIR__ . '/data/FunctionUse.inc', DummySniff::class);
