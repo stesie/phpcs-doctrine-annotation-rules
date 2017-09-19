@@ -59,4 +59,10 @@ class VarTagTest extends TestCase
         $file = $this->checkFile(__DIR__ . '/data/JoinNoJoinColumnOnOneToOneInverseSide.inc', VarTagSniff::class);
         $this->assertNoSniffErrors($file);
     }
+
+    public function testAnnotationsWithClassConstants()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/AnnotationWithClassConstants.inc', VarTagSniff::class);
+        $this->assertNoSniffErrors($file);
+    }
 }

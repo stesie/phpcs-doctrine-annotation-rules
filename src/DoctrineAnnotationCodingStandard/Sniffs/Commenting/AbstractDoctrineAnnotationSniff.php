@@ -238,9 +238,7 @@ abstract class AbstractDoctrineAnnotationSniff implements Sniff
     {
         $content = $this->getDocblockContent($phpcsFile, $stackPtr);
 
-        $imports = array_filter($this->imports->toArray(), function (string $className) {
-            return strpos($className, 'Doctrine\\ORM\\Mapping') === 0;
-        });
+        $imports = array_merge($this->imports->toArray(), ['__NAMESPACE__' => $this->namespace]);
 
         $parser = new DocParser();
         $parser->setIgnoreNotImportedAnnotations(true);
