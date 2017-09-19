@@ -19,6 +19,12 @@ class VarTagTest extends TestCase
         $this->assertFixedEqualsFile(__DIR__ . '/data/VarTagMissing.fixed.inc', $file);
     }
 
+    public function testEmptyVarTagFix()
+    {
+        $file = $this->checkFile(__DIR__ . '/data/VarTagEmpty.inc', VarTagSniff::class);
+        $this->assertFixedEqualsFile(__DIR__ . '/data/VarTagEmpty.fixed.inc', $file);
+    }
+
     public function testWrongVarTagOnORMColumn()
     {
         $file = $this->checkFile(__DIR__ . '/data/VarTagWrong.inc', VarTagSniff::class);

@@ -168,16 +168,25 @@ class DocBlockHelper
             throw new \LogicException('@var tag missing');
         }
 
+        $varTagLineNumber = $tokens[$tagPos]['line'];
+
         if ($tokens[$tagPos + 1]['type'] !== 'T_DOC_COMMENT_WHITESPACE') {
-            throw new ParseErrorException('Token after @tag not T_DOC_COMMENT_WHITESPACE');
+            throw new ParseErrorException('Token after @var tag not T_DOC_COMMENT_WHITESPACE');
         }
 
-        if ($tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
-            throw new ParseErrorException('T_DOC_COMMENT_STRING expected after @tag');
+        if ($tokens[$tagPos + 2]['line'] === $varTagLineNumber
+            && $tokens[$tagPos + 2]['type'] !== 'T_DOC_COMMENT_STRING') {
+            throw new ParseErrorException('T_DOC_COMMENT_STRING expected after @var tag');
         }
 
         $phpcsFile->fixer->beginChangeset();
-        $phpcsFile->fixer->replaceToken($tagPos + 2, $content);
+
+        if ($tokens[$tagPos + 2]['line'] !== $varTagLineNumber) {
+            $phpcsFile->fixer->replaceToken($tagPos + 1, sprintf(" %s\n", $content));
+        } else {
+            $phpcsFile->fixer->replaceToken($tagPos + 2, $content);
+        }
+
         $phpcsFile->fixer->endChangeset();
     }
 }

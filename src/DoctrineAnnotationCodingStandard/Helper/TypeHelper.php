@@ -78,6 +78,10 @@ class TypeHelper
      */
     private static function convertPrimitiveType(string $varTagContent, string $namespace = null, ImportClassMap $classMap): Type
     {
+        if ($varTagContent === '') {
+            return new UnqualifiedObjectType($varTagContent);
+        }
+
         if (substr($varTagContent, -2) === '[]') {
             return new ArrayType(self::convertPrimitiveType(substr($varTagContent, 0, -2), $namespace, $classMap));
         }
