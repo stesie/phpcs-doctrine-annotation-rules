@@ -2,6 +2,7 @@
 
 namespace DoctrineAnnotationCodingStandardTests\Helper;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineAnnotationCodingStandard\Helper\TypeHelper;
 use DoctrineAnnotationCodingStandard\ImportClassMap;
 use DoctrineAnnotationCodingStandard\Types\AnyObjectType;
@@ -88,6 +89,16 @@ class TypeHelperTest extends TestCase
         $classMap->add('Customer', 'AppBundle\\Entity\\Customer');
 
         $type = TypeHelper::fromString('Collection|Customer[]', null, $classMap);
+        $this->assertEquals(new CollectionType(new ObjectType('AppBundle\\Entity\\Customer')), $type);
+    }
+
+    public function testFromStringWithTypedArrayCollection()
+    {
+        $classMap = new ImportClassMap();
+        $classMap->add('ArrayCollection', ArrayCollection::class);
+        $classMap->add('Customer', 'AppBundle\\Entity\\Customer');
+
+        $type = TypeHelper::fromString('ArrayCollection|Customer[]', null, $classMap);
         $this->assertEquals(new CollectionType(new ObjectType('AppBundle\\Entity\\Customer')), $type);
     }
 

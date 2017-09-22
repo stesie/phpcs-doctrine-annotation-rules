@@ -42,6 +42,10 @@ class UnqualifiedObjectType implements Type, QualifyableObjectType
             $fqcn = $namespace . '\\' . $this->className;
         }
 
+        if (class_exists($fqcn) && (new \ReflectionClass($fqcn))->implementsInterface(Collection::class)) {
+            return new CollectionType(new MixedType());
+        }
+
         if ($fqcn === Collection::class) {
             return new CollectionType(new MixedType());
         }
