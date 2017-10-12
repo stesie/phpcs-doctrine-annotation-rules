@@ -6,16 +6,20 @@ use DoctrineAnnotationCodingStandard\ImportClassMap;
 
 class NullableType implements Type, QualifyableObjectType
 {
-    use QualifyViaItemTypeDelegationTrait;
-
     /**
      * @var Type
      */
     private $itemType;
 
-    public function __construct(Type $itemType)
+    /**
+     * @var bool
+     */
+    private $maybe;
+
+    public function __construct(Type $itemType, bool $maybe = false)
     {
         $this->itemType = $itemType;
+        $this->maybe = $maybe;
     }
 
     /**
@@ -34,7 +38,26 @@ class NullableType implements Type, QualifyableObjectType
      */
     public function isEqual(Type $other): bool
     {
+        if ($this->maybe && $this->itemType->isEqual($other)) {
+            return true;
+        }
+
         return $other instanceof self &&
             $this->itemType->isEqual($other->itemType);
+    }
+
+    /**
+     * @param string|null $namespace
+     * @param ImportClassMap $imports
+     * @param string $mode
+     * @return Type
+     */
+    public function qualify(string $namespace = null, ImportClassMap $imports, string $mode = self::MODE_PHP_STANDARD): Type
+    {
+        if (!$this->itemType instanceof QualifyableObjectType) {
+            return $this;
+        }
+
+        return new self($this->itemType->qualify($namespace, $imports, $mode), $this->maybe);
     }
 }

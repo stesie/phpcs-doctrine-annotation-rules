@@ -142,7 +142,7 @@ class DoctrineMappingHelper
                 if ($mappingAnnotation instanceof Mapping\OneToOne &&
                     ($mappingAnnotation->mappedBy !== null && $mappingAnnotation->mappedBy !== '')
                 ) {
-                    return $objectType;
+                    return new NullableType($objectType, true);
                 }
 
                 /** @var JoinColumn|null $joinColumn */
