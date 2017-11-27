@@ -57,7 +57,6 @@ class DoctrineMappingHelper
     public static function getTypeFromDoctrineType(string $doctrineType, array $extraTypes = []): Type
     {
         switch ($doctrineType) {
-            case 'bigint':
             case 'integer':
             case 'smallint':
                 return new IntegerType();
@@ -65,6 +64,7 @@ class DoctrineMappingHelper
             case 'float':
                 return new FloatType();
 
+            case 'bigint':
             case 'decimal':
             case 'string':
             case 'text':
