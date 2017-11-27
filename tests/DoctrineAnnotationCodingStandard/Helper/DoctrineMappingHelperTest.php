@@ -87,7 +87,7 @@ class DoctrineMappingHelperTest extends TestCase
         return [
             [ 'smallint', new IntegerType() ],
             [ 'integer', new IntegerType() ],
-            [ 'bigint', new IntegerType() ],
+            [ 'bigint', new StringType() ],
 
             [ 'decimal', new StringType() ],
             [ 'float', new FloatType() ],
